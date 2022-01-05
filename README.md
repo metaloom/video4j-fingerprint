@@ -15,21 +15,20 @@ Downside of the used stacking approach is however that there is no robustness ag
 <dependency>
   <groupId>io.metaloom.video</groupId>
   <artifactId>video4j-fingerprint</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
 ## Usage
 
 ```java
-// Open the video using the video4j API
+// Open the video using the Video4j API
 try (Video video = Videos.open("video.mp4"))) {
   // Create a fingerprinter for the video
   DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter(video);
 
   // Run the actual hashing process
-  // hash = 038008e00ef0bff0bdf0bdf0fdf0fde0fef07cf8bf13bf00d002f4f0fff8dfb001
   String hash = HashUtils.bytesToHex(hasher.hash());
-
+  // Resulting hash = 038008e00ef0bff0bdf0bdf0fdf0fde0fef07cf8bf13bf00d002f4f0fff8dfb001
 }
 ```
