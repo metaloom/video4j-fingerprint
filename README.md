@@ -7,7 +7,7 @@ Details on the actual fingerprinting process can be found in this dedicated [Blo
 The actual fingerprinting process is relatively fast as it does not require complex transformation or edge detection.
 Downside of the used stacking approach is however that there is no robustness against image rotation or mirroring of the image. Other solutions like `pHash` might be better if this is a problematic limitation.
 
-[![Process](examples/video.png)](examples/processing.mp4)
+![Example Process](examples/processing.gif)
 
 ## Maven
 
