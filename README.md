@@ -25,10 +25,10 @@ Downside of the used stacking approach is however that there is no robustness ag
 // Open the video using the Video4j API
 try (Video video = Videos.open("video.mp4"))) {
   // Create a fingerprinter for the video
-  DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter(video);
+  DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter();
 
   // Run the actual hashing process
-  String hash = HashUtils.bytesToHex(hasher.hash());
+  String hash = hasher.hash().hex();
   // Resulting hash = 038008e00ef0bff0bdf0bdf0fdf0fde0fef07cf8bf13bf00d002f4f0fff8dfb001
 }
 ```
