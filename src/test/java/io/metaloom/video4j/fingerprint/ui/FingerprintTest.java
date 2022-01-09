@@ -7,12 +7,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import io.metaloom.utils.hash.HashUtils;
-import io.metaloom.video4j.fingerprint.AbstractVideoTest;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Videos;
-import io.metaloom.video4j.fingerprint.DefaultVideoFingerprinter;
-import io.metaloom.video4j.fingerprint.FingerprintUtils;
+import io.metaloom.video4j.fingerprint.AbstractVideoTest;
+import io.metaloom.video4j.fingerprint.impl.DefaultVideoFingerprinter;
+import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
 import io.metaloom.video4j.impl.MatProvider;
 
 public class FingerprintTest extends AbstractVideoTest {
@@ -21,18 +20,16 @@ public class FingerprintTest extends AbstractVideoTest {
 
 	@Test
 	public void runHasher() throws InterruptedException, IOException {
+		DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter();
 		String hash1, hash2, hash3;
 		try (Video video1 = Videos.open(BBB_SMALL)) {
-			DefaultVideoFingerprinter hasher1 = new DefaultVideoFingerprinter(video1);
-			hash1 = HashUtils.bytesToHex(hasher1.hash());
+			hash1 = hasher.hash(video1).hex();
 		}
 		try (Video video2 = Videos.open(BBB_MEDIUM)) {
-			DefaultVideoFingerprinter hasher2 = new DefaultVideoFingerprinter(video2);
-			hash2 = HashUtils.bytesToHex(hasher2.hash());
+			hash2 = hasher.hash(video2).hex();
 		}
 		try (Video video3 = Videos.open(BBB_LARGE)) {
-			DefaultVideoFingerprinter hasher3 = new DefaultVideoFingerprinter(video3);
-			hash3 = HashUtils.bytesToHex(hasher3.hash());
+			hash3 = hasher.hash(video3).hex();
 		}
 
 		// Assert that only a few bits differ

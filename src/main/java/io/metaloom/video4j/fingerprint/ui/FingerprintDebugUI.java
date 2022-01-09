@@ -17,8 +17,12 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import org.opencv.core.Mat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import io.metaloom.utils.hash.HashUtils;
+import io.metaloom.video4j.Video;
+import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
+import io.metaloom.video4j.fingerprint.Fingerprint;
 import io.metaloom.video4j.fingerprint.VideoFingerprinter;
 
 /**
@@ -26,20 +30,23 @@ import io.metaloom.video4j.fingerprint.VideoFingerprinter;
  */
 public class FingerprintDebugUI {
 
-	private List<VideoFingerprinter> hashers = new ArrayList<>();
-	private Map<VideoFingerprinter, FPPreviewPanel> vidsPanels = new HashMap<>();
+	private static final Logger log = LoggerFactory.getLogger(FingerprintDebugUI.class);
+
+	private List<Video> videos = new ArrayList<>();
+	private Map<Video, FPPreviewPanel> vidsPanels = new HashMap<>();
 
 	private JFrame frame = new JFrame("Video Title");
 	private JPanel listPanel = new JPanel();
 
-	private int blowupSize;
+	private final int blowupSize;
+	private final VideoFingerprinter hasher;
 
-	public FingerprintDebugUI(int blowupSize) {
+	public FingerprintDebugUI(int blowupSize, VideoFingerprinter hasher) {
 		this.blowupSize = blowupSize;
+		this.hasher = hasher;
 	}
 
 	public void show() {
-
 		JPanel controlPanel = new JPanel();
 		controlPanel.add(createSkipSlider());
 		controlPanel.add(createContrastSlider());
@@ -48,9 +55,9 @@ public class FingerprintDebugUI {
 
 		listPanel.setName("Video");
 		frame.setLayout(new FlowLayout());
-		for (VideoFingerprinter hasher : hashers) {
+		for (Video video : videos) {
 			FPPreviewPanel preview = new FPPreviewPanel(blowupSize);
-			vidsPanels.put(hasher, preview);
+			vidsPanels.put(video, preview);
 			frame.add(preview);
 		}
 
@@ -58,21 +65,26 @@ public class FingerprintDebugUI {
 
 		// frame.setContentPane(listPanel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(blowupSize * 6 + 120, (blowupSize + 10) * (hashers.size()) + 110);
+		frame.setSize(blowupSize * 6 + 120, (blowupSize + 10) * (videos.size()) + 110);
 		frame.setVisible(true);
 
+	}
+
+	public void add(Video video) {
+		videos.add(video);
 	}
 
 	private Component createPlayButton() {
 		ImageIcon playButtonIcon = createImageIcon("/images/play.gif");
 		JButton playButton = new JButton("Play", playButtonIcon);
 		playButton.addActionListener(event -> {
+
 			try {
-				for (VideoFingerprinter hasher : hashers) {
-					byte[] hash = hasher.hash((a, b, c, d, e, f) -> refresh(hasher, a, b, c, d, e, f));
-					if (hash != null) {
-						System.out.println("Len: " + hash.length);
-						System.out.println("Hex: " + HashUtils.bytesToHex(hash));
+				for (Video video : videos) {
+					Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
+					if (fp != null) {
+						log.debug("Len: " + fp.hash());
+						log.debug("Hex: " + fp.hex());
 					}
 				}
 			} catch (InterruptedException e) {
@@ -87,10 +99,8 @@ public class FingerprintDebugUI {
 		slider.addChangeListener(event -> {
 			double val = (double) slider.getValue();
 			double factor = val / 100f;
-			System.out.println("SkipFactor: " + factor);
-			for (VideoFingerprinter hasher : hashers) {
-				hasher.setSkipFactor(factor);
-			}
+			log.info("SkipFactor: " + factor);
+			hasher.setSkipFactor(factor);
 		});
 		slider.setName("Skip");
 		slider.setMajorTickSpacing(2550);
@@ -109,10 +119,8 @@ public class FingerprintDebugUI {
 		slider.addChangeListener(event -> {
 			int val = slider.getValue();
 			double contrastLevel = (double) val / 64f;
-			System.out.println("Level: " + contrastLevel);
-			for (VideoFingerprinter hasher : hashers) {
-				// hasher.setContrastAlpha(contrastLevel);
-			}
+			log.debug("Level: " + contrastLevel);
+			// hasher.setContrastAlpha(contrastLevel);
 		});
 
 		slider.setMajorTickSpacing(50);
@@ -130,10 +138,8 @@ public class FingerprintDebugUI {
 		slider.addChangeListener(event -> {
 			int val = slider.getValue();
 			double factor = (double) val / 256f;
-			System.out.println("StackFactor: " + factor);
-			for (VideoFingerprinter hasher : hashers) {
-				hasher.setStackFactor(factor);
-			}
+			log.debug("StackFactor: " + factor);
+			hasher.setStackFactor(factor);
 		});
 
 		slider.setMajorTickSpacing(50);
@@ -147,17 +153,14 @@ public class FingerprintDebugUI {
 	}
 
 	protected static ImageIcon createImageIcon(String path) {
-		URL imgURL = VideoFingerprinter.class.getResource(path);
+		URL imgURL = AbstractVideoFingerprinter.class.getResource(path);
 		return new ImageIcon(imgURL);
 	}
 
-	public void refresh(VideoFingerprinter hasher, Mat a, Mat b, Mat c, Mat d, Mat e, Mat f) {
-		FPPreviewPanel preview = vidsPanels.get(hasher);
+	public void refresh(Video video, Mat a, Mat b, Mat c, Mat d, Mat e, Mat f) {
+		FPPreviewPanel preview = vidsPanels.get(video);
 		preview.setImages(a, b, c, d, e, f);
 		preview.repaint();
 	}
 
-	public void add(VideoFingerprinter hasher) {
-		hashers.add(hasher);
-	}
 }
