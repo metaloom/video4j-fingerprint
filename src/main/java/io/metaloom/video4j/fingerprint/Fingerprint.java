@@ -51,4 +51,8 @@ public interface Fingerprint {
 		return DefaultFingerprintCodec.instance().decode(data);
 	}
 
+	static Fingerprint of(String hex) {
+		return of(HashUtils.hexToBytes(hex));
+	}
+
 }

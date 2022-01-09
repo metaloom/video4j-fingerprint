@@ -31,6 +31,12 @@ public class FingerprintCodecTest extends AbstractVideoTest {
 		assertThat(fp).matches(mat).matches(fp.hex()).matches(fp.array());
 	}
 
+	@Test(expected = InvalidFormatException.class)
+	public void testOldFingerprint() {
+		String hex = "fefff4fdf4f9bcf980f800f840fa407e003e581efe1ffe1fff330e000000000001";
+		Fingerprint.of(hex);
+	}
+
 	@Test
 	public void testRandomMat() {
 		for (int n = 0; n < 10; n++) {
@@ -42,4 +48,3 @@ public class FingerprintCodecTest extends AbstractVideoTest {
 	}
 
 }
-

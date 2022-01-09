@@ -7,6 +7,7 @@ import org.opencv.core.Mat;
 
 import io.metaloom.video4j.fingerprint.Fingerprint;
 import io.metaloom.video4j.fingerprint.FingerprintCodec;
+import io.metaloom.video4j.fingerprint.InvalidFormatException;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
 
 /**
@@ -35,7 +36,7 @@ public class DefaultFingerprintCodec implements FingerprintCodec {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		short version = bb.getShort();
 		if (version != Fingerprint.FINGERPRINT_VERSION_V1) {
-			throw new RuntimeException("The provided data contains fingerprint version " + version + " and is incompatible with "
+			throw new InvalidFormatException("The provided data contains fingerprint version " + version + " and is incompatible with "
 				+ Fingerprint.FINGERPRINT_VERSION_V1 + " of this library version");
 		}
 		// Skip next 1 byte
