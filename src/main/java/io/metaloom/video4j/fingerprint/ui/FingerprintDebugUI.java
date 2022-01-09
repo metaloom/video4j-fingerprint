@@ -83,7 +83,7 @@ public class FingerprintDebugUI {
 				for (Video video : videos) {
 					Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
 					if (fp != null) {
-						log.debug("Len: " + fp.hash());
+						log.debug("Len: " + fp.array());
 						log.debug("Hex: " + fp.hex());
 					}
 				}

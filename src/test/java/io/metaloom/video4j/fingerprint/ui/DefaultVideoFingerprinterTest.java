@@ -14,7 +14,7 @@ import io.metaloom.video4j.fingerprint.impl.DefaultVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
 import io.metaloom.video4j.impl.MatProvider;
 
-public class FingerprintTest extends AbstractVideoTest {
+public class DefaultVideoFingerprinterTest extends AbstractVideoTest {
 
 	public static int blowupSize = 128;
 

@@ -15,12 +15,12 @@ public final class FingerprintUtils {
 	}
 
 	/**
-	 * Transform the {@link Mat} data into a byte array.
+	 * Transform the {@link Mat} data into a bitset which contains the bw pixel data.
 	 * 
 	 * @param frame
 	 * @return
 	 */
-	public static byte[] transform(Mat frame) {
+	public static BitSet transform(Mat frame) {
 		BitSet bitset = new BitSet();
 		int bitNo = 0;
 		if (log.isTraceEnabled()) {
@@ -34,8 +34,7 @@ public final class FingerprintUtils {
 				bitNo++;
 			}
 		}
-		bitset.set(256, true);
-		return bitset.toByteArray();
+		return bitset;
 	}
 
 	/**
@@ -74,4 +73,5 @@ public final class FingerprintUtils {
 		return Arrays.stream(numbers)
 			.min().orElse(Integer.MAX_VALUE);
 	}
+
 }
