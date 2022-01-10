@@ -3,12 +3,10 @@ package io.metaloom.video4j.fingerprint.v1;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Video4j;
 import io.metaloom.video4j.Videos;
-import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
-import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 
 public class UsageDemo {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		binaryCodecExample();
 	}
 

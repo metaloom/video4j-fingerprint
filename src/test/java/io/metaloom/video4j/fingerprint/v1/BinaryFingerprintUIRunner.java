@@ -7,7 +7,6 @@ import io.metaloom.video4j.Video4j;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.ui.FingerprintDebugUI;
-import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 
 /**
  * Starts a small UI which shows the hasher process in action

@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.Fingerprint;
-import io.metaloom.video4j.fingerprint.VideoFingerprinter;
+import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 
 /**
  * A small UI which contains sliders to control the individual parameters of the video fingerprinter.
@@ -39,9 +39,9 @@ public class FingerprintDebugUI {
 	private JPanel listPanel = new JPanel();
 
 	private final int blowupSize;
-	private final VideoFingerprinter hasher;
+	private final BinaryVideoFingerprinter hasher;
 
-	public FingerprintDebugUI(int blowupSize, VideoFingerprinter hasher) {
+	public FingerprintDebugUI(int blowupSize, BinaryVideoFingerprinter hasher) {
 		this.blowupSize = blowupSize;
 		this.hasher = hasher;
 	}
@@ -78,17 +78,12 @@ public class FingerprintDebugUI {
 		ImageIcon playButtonIcon = createImageIcon("/images/play.gif");
 		JButton playButton = new JButton("Play", playButtonIcon);
 		playButton.addActionListener(event -> {
-
-			try {
-				for (Video video : videos) {
-					Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
-					if (fp != null) {
-						log.debug("Len: " + fp.array());
-						log.debug("Hex: " + fp.hex());
-					}
+			for (Video video : videos) {
+				Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
+				if (fp != null) {
+					log.debug("Len: " + fp.array());
+					log.debug("Hex: " + fp.hex());
 				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		});
 		return playButton;

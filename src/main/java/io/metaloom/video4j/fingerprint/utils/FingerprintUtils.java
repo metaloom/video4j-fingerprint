@@ -37,64 +37,13 @@ public final class FingerprintUtils {
 		return bitset;
 	}
 
-	public static short[] transformToShort4Bit(BitSet bits, int len) {
-		short[] result = new short[len];
-		int nBit = 0;
-		for (int i = 0; i < result.length; i++) {
-			byte number = 0;
-			number = (byte) (number >> 2);
-			// for (int r = 0; r < 4; r++) {
-			// number = bits.get(nBit++) ? 1:0;
-			// }
-
-			System.out.println("ER: " + toShort4Bit(bits, 9));
-			result[i] = (short) number;
-		}
-		return result;
-	}
-
-	/**
-	 * Convert the short array into a bitset with reduces precision (2bit)
-	 * 
-	 * @param numbers
-	 * @return
-	 */
-	public static BitSet transformToBitSet2Bit(short[] numbers) {
-		BitSet data = new BitSet();
-		int nBit = 0;
-		for (int i = 0; i < numbers.length; i++) {
-			short number = numbers[i];
-			switch (number) {
-			case 0:
-				data.set(nBit++, false);
-				data.set(nBit++, false);
-				break;
-			case 1:
-				data.set(nBit++, false);
-				data.set(nBit++, true);
-				break;
-			case 2:
-				data.set(nBit++, true);
-				data.set(nBit++, false);
-				break;
-			case 3:
-				data.set(nBit++, true);
-				data.set(nBit++, true);
-				break;
-			default:
-				throw new RuntimeException("Invalid number encountered. Can't map values >4 Got: " + number);
-			}
-		}
-		return data;
-	}
-
 	/**
 	 * Print the given amount of bytes in binary form.
 	 * 
 	 * @param bits
 	 * @param nBytes
 	 */
-	private static void print(BitSet bits, int nBytes) {
+	public static void print(BitSet bits, int nBytes) {
 		StringBuffer b = new StringBuffer();
 		int nBit = 0;
 		for (int i = 0; i < nBytes * 8; i++) {
@@ -133,42 +82,6 @@ public final class FingerprintUtils {
 		}
 
 		return dp[x.length()][y.length()];
-	}
-
-	/**
-	 * Extracts a short from the next two bits of the set.
-	 * 
-	 * @param bits
-	 * @param offset
-	 * @return
-	 */
-	public static short toShort2Bit(BitSet bits, int offset) {
-		int radix = 2;
-		int i = offset;
-		int len = 2;
-		int result = 0;
-		while (i < offset + len) {
-			int digit = bits.get(i) ? 1 : 0;
-			result *= radix;
-			result -= digit;
-			i++;
-		}
-		return (short) -result;
-	}
-
-	/**
-	 * Extract a short from the next four bits of the set.
-	 * 
-	 * @param bits
-	 * @param offset
-	 * @return
-	 */
-	public static byte toShort4Bit(BitSet bits, int offset) {
-		print(bits, 1);
-		byte b = (byte) (bits.toByteArray()[0] << 4);
-		BitSet b2 = BitSet.valueOf(new byte[] { b });
-		print(b2, 1);
-		return b;
 	}
 
 	private static int costOfSubstitution(char a, char b) {

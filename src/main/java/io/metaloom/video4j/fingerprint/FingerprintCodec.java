@@ -5,7 +5,6 @@ import java.util.Objects;
 import org.opencv.core.Mat;
 
 import io.metaloom.utils.hash.HashUtils;
-import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
 
 /**
  * Codec which can handle the creation and conversion of fingerprint data.
