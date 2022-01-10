@@ -17,7 +17,7 @@ import io.metaloom.video4j.Video;
 import io.metaloom.video4j.impl.MatProvider;
 import io.metaloom.video4j.opencv.CVUtils;
 
-public abstract class AbstractVideoFingerprinter implements VideoFingerprinter {
+public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implements VideoFingerprinter<T> {
 
 	private static Logger log = LoggerFactory.getLogger(AbstractVideoFingerprinter.class.getName());
 
@@ -49,12 +49,12 @@ public abstract class AbstractVideoFingerprinter implements VideoFingerprinter {
 	}
 
 	@Override
-	public Fingerprint hash(Video video) throws InterruptedException {
+	public T hash(Video video) throws InterruptedException {
 		return hash(video, null);
 	}
 
 	@Override
-	public Fingerprint hash(Video video, PreviewHandler handler) throws InterruptedException {
+	public T hash(Video video, PreviewHandler handler) throws InterruptedException {
 		if (log.isDebugEnabled()) {
 			log.debug("Start hashing of " + video.path());
 		}
@@ -141,7 +141,7 @@ public abstract class AbstractVideoFingerprinter implements VideoFingerprinter {
 			if (finalStep == null) {
 				return null;
 			}
-			Fingerprint fp = createFingerprint(finalStep);
+			T fp = createFingerprint(finalStep);
 			return fp;
 		} finally {
 			CVUtils.free(finalStep);
@@ -157,7 +157,7 @@ public abstract class AbstractVideoFingerprinter implements VideoFingerprinter {
 	 * @param mat
 	 * @return
 	 */
-	protected abstract Fingerprint createFingerprint(Mat mat);
+	protected abstract T createFingerprint(Mat mat);
 
 	private Mat toBinary(Mat src, PreviewHandler handler) {
 		Mat result = src.clone();

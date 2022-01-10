@@ -3,9 +3,8 @@ package io.metaloom.video4j.fingerprint.v1;
 import org.opencv.core.Mat;
 
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
-import io.metaloom.video4j.fingerprint.Fingerprint;
 
-public class BinaryVideoFingerprinter extends AbstractVideoFingerprinter {
+public class BinaryVideoFingerprinter extends AbstractVideoFingerprinter<BinaryFingerprint> {
 
 	public static int hashSize = 16;
 	public static int len = 30 * 3;
@@ -19,7 +18,7 @@ public class BinaryVideoFingerprinter extends AbstractVideoFingerprinter {
 	}
 
 	@Override
-	protected Fingerprint createFingerprint(Mat mat) {
+	protected BinaryFingerprint createFingerprint(Mat mat) {
 		return CODEC.encode(mat);
 	}
 }

@@ -5,7 +5,7 @@ import io.metaloom.video4j.Video;
 /**
  * Fingerprinter which can be used to generate media fingerprints.
  */
-public interface VideoFingerprinter {
+public interface VideoFingerprinter<T extends Fingerprint> {
 
 	/**
 	 * Hash the video and return the fingerprint.
@@ -14,7 +14,7 @@ public interface VideoFingerprinter {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	Fingerprint hash(Video video) throws InterruptedException;
+	T hash(Video video) throws InterruptedException;
 
 	/**
 	 * Hash the given video and use the preview handler to hook into the hashing processes.
@@ -24,7 +24,7 @@ public interface VideoFingerprinter {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	Fingerprint hash(Video video, PreviewHandler handler) throws InterruptedException;
+	T hash(Video video, PreviewHandler handler) throws InterruptedException;
 
 	/**
 	 * Set the skip factor which will influence what section of the video should be chosen for fingerprinting.

@@ -22,13 +22,17 @@ Downside of the used stacking approach is however that there is no robustness ag
 ## Usage
 
 ```java
+Video4j.init();
+
+// Create a fingerprinter for the video
+BinaryVideoFingerprinter gen = new BinaryVideoFingerprinter();
+
 // Open the video using the Video4j API
-try (Video video = Videos.open("video.mp4"))) {
-  // Create a fingerprinter for the video
-  DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter();
+try (Video video = Videos.open("video.mp4")) {
 
   // Run the actual hashing process
-  String hash = hasher.hash().hex();
-  // Resulting hash = 038008e00ef0bff0bdf0bdf0fdf0fde0fef07cf8bf13bf00d002f4f0fff8dfb001
+  BinaryFingerprint fingerprint = gen.hash(video);
+  String hex = fingerprint.hex();
+  // hex = 0001000100ff060006000f002e001d0084000600e40076d172c07c84ffcefffffefff8fffdff
 }
 ```
