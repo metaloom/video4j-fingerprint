@@ -1,5 +1,7 @@
-package io.metaloom.video4j.fingerprint.test;
+package io.metaloom.video4j.fingerprint.v1;
 
+import static io.metaloom.video4j.fingerprint.v1.BinaryFingerprint.FINGERPRINT_VECTOR_SIZE;
+import static io.metaloom.video4j.fingerprint.v1.BinaryFingerprint.FINGERPRINT_VERSION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,16 +14,15 @@ import org.assertj.core.api.AbstractAssert;
 import org.opencv.core.Mat;
 
 import io.metaloom.utils.hash.HashUtils;
-import io.metaloom.video4j.fingerprint.Fingerprint;
 
-public class FingerprintAssert extends AbstractAssert<FingerprintAssert, Fingerprint> {
+public class BinaryFingerprintAssert extends AbstractAssert<BinaryFingerprintAssert, BinaryFingerprint> {
 
-	protected FingerprintAssert(Fingerprint actual) {
-		super(actual, FingerprintAssert.class);
+	public BinaryFingerprintAssert(BinaryFingerprint actual) {
+		super(actual, BinaryFingerprintAssert.class);
 	}
 
-	public FingerprintAssert matches(Mat mat) {
-		assertEquals("The version of the fingerprint did not match.", actual.version(), Fingerprint.FINGERPRINT_VERSION_V1);
+	public BinaryFingerprintAssert matches(Mat mat) {
+		assertEquals("The version of the fingerprint did not match.", actual.version(), FINGERPRINT_VERSION);
 		byte[] data = actual.array();
 		int offset = 0;
 		for (int x = 0; x < mat.width(); x++) {
@@ -39,23 +40,23 @@ public class FingerprintAssert extends AbstractAssert<FingerprintAssert, Fingerp
 		return this;
 	}
 
-	public FingerprintAssert matches(String hex) {
+	public BinaryFingerprintAssert matches(String hex) {
 		matches(HashUtils.hexToBytes(hex));
 		assertEquals("The hex fingerprint should always have the same length", 76, hex.length());
 		assertEquals("The hex strings were different", hex, actual.hex());
 		return this;
 	}
 
-	public FingerprintAssert matches(byte[] data) {
+	public BinaryFingerprintAssert matches(byte[] data) {
 		ByteBuffer bb = ByteBuffer.wrap(data);
-		assertEquals("The area should contain the fingerprint version.", Fingerprint.FINGERPRINT_VERSION_V1, bb.getShort());
+		assertEquals("The area should contain the fingerprint version.", FINGERPRINT_VERSION, bb.getShort());
 		assertEquals("The area should always be 0.", 0x00, bb.get());
-		assertEquals("The area should contain the fingerprint size.", Fingerprint.DEFAULT_FINGERPRINT_SIZE, bb.getShort());
+		assertEquals("The area should contain the fingerprint size.", FINGERPRINT_VECTOR_SIZE, bb.getShort());
 		assertEquals("The area should always be 0.", -1, bb.get());
 
 		byte[] bitData = Arrays.copyOfRange(data, 2 + 1 + 2 + 1, data.length);
 		BitSet set = BitSet.valueOf(bitData);
-		for (int bit = 0; bit < Fingerprint.DEFAULT_FINGERPRINT_SIZE; bit++) {
+		for (int bit = 0; bit < BinaryFingerprint.FINGERPRINT_VECTOR_SIZE; bit++) {
 			assertEquals("The bit at {" + bit + "} did not match", actual.bits().get(bit), set.get(bit));
 		}
 		return this;

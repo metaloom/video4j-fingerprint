@@ -8,4 +8,8 @@ public class InvalidFormatException extends RuntimeException {
 		super(msg);
 	}
 
+	public InvalidFormatException(String msg, Exception e) {
+		super(msg, e);
+	}
+
 }

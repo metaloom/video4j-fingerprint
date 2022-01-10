@@ -154,10 +154,10 @@ public abstract class AbstractVideoFingerprinter implements VideoFingerprinter {
 	/**
 	 * Construct the fingerprint from the resulting {@link Mat}.
 	 * 
-	 * @param finalStep
+	 * @param mat
 	 * @return
 	 */
-	protected abstract Fingerprint createFingerprint(Mat finalStep);
+	protected abstract Fingerprint createFingerprint(Mat mat);
 
 	private Mat toBinary(Mat src, PreviewHandler handler) {
 		Mat result = src.clone();

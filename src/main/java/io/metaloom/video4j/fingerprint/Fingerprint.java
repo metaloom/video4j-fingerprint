@@ -1,17 +1,8 @@
 package io.metaloom.video4j.fingerprint;
 
-import java.util.BitSet;
-
-import org.opencv.core.Mat;
-
 import io.metaloom.utils.hash.HashUtils;
-import io.metaloom.video4j.fingerprint.impl.DefaultFingerprintCodec;
 
 public interface Fingerprint {
-
-	public static final short DEFAULT_FINGERPRINT_SIZE = 16 * 16;
-
-	public static final short FINGERPRINT_VERSION_V1 = 1;
 
 	/**
 	 * Version of the fingerprint.
@@ -28,13 +19,6 @@ public interface Fingerprint {
 	byte[] array();
 
 	/**
-	 * Return the set bits for the fingerprint.
-	 * 
-	 * @return
-	 */
-	BitSet bits();
-
-	/**
 	 * Return the hex representation of the fingerprint.
 	 * 
 	 * @return
@@ -43,16 +27,11 @@ public interface Fingerprint {
 		return HashUtils.bytesToHex(array());
 	}
 
-	static Fingerprint of(Mat mat) {
-		return DefaultFingerprintCodec.instance().encode(mat);
-	}
-
-	static Fingerprint of(byte[] data) {
-		return DefaultFingerprintCodec.instance().decode(data);
-	}
-
-	static Fingerprint of(String hex) {
-		return of(HashUtils.hexToBytes(hex));
-	}
+	/**
+	 * Convert the fingerprint into a vector of floats.
+	 * 
+	 * @return
+	 */
+	float[] vector();
 
 }

@@ -74,4 +74,14 @@ public final class FingerprintUtils {
 			.min().orElse(Integer.MAX_VALUE);
 	}
 
+	public static void debugBin(byte[] data) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < data.length; i++) {
+			for (int b = 7; b >= 0; --b) {
+				sb.append(data[i] >>> b & 1);
+			}
+		}
+		log.trace(sb.toString());
+	}
+
 }

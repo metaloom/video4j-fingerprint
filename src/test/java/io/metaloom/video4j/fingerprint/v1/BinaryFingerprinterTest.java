@@ -1,4 +1,4 @@
-package io.metaloom.video4j.fingerprint.ui;
+package io.metaloom.video4j.fingerprint.v1;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,18 +9,18 @@ import org.junit.Test;
 
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Videos;
-import io.metaloom.video4j.fingerprint.AbstractVideoTest;
-import io.metaloom.video4j.fingerprint.impl.DefaultVideoFingerprinter;
+import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
+import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 import io.metaloom.video4j.impl.MatProvider;
 
-public class DefaultVideoFingerprinterTest extends AbstractVideoTest {
+public class BinaryFingerprinterTest extends AbstractMediaTest {
 
 	public static int blowupSize = 128;
 
 	@Test
 	public void runHasher() throws InterruptedException, IOException {
-		DefaultVideoFingerprinter hasher = new DefaultVideoFingerprinter();
+		BinaryVideoFingerprinter hasher = new BinaryVideoFingerprinter();
 		String hash1, hash2, hash3;
 		try (Video video1 = Videos.open(BBB_SMALL)) {
 			hash1 = hasher.hash(video1).hex();
