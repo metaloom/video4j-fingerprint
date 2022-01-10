@@ -38,6 +38,18 @@ public class BinaryFingerprintCodec implements FingerprintCodec<BinaryFingerprin
 	}
 
 	@Override
+	public byte[] encode(BinaryFingerprint fingerprint) {
+		int headerSize = (2 + 1 + 2 + 1);
+		ByteBuffer bb = ByteBuffer.allocate(32 + headerSize);
+		bb.putShort(fingerprint.version());
+		bb.put((byte) 0x00);
+		bb.putShort(FINGERPRINT_VECTOR_SIZE);
+		bb.put((byte) 0xFF);
+		bb.put(fingerprint.bits().toByteArray());
+		return bb.array();
+	}
+
+	@Override
 	public BinaryFingerprint decode(byte[] data) {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		short version = bb.getShort();
@@ -66,18 +78,6 @@ public class BinaryFingerprintCodec implements FingerprintCodec<BinaryFingerprin
 		return new BinaryFingerprintImpl(bits);
 	}
 
-	@Override
-	public byte[] encode(BinaryFingerprint fingerprint) {
-		int headerSize = (2 + 1 + 2 + 1);
-		ByteBuffer bb = ByteBuffer.allocate(32 + headerSize);
-		bb.putShort(fingerprint.version());
-		bb.put((byte) 0x00);
-		bb.putShort(FINGERPRINT_VECTOR_SIZE);
-		bb.put((byte) 0xFF);
-		bb.put(fingerprint.bits().toByteArray());
-		return bb.array();
-	}
-
 	/**
 	 * Returns a condensed form of the regular vector.
 	 * 
@@ -88,7 +88,7 @@ public class BinaryFingerprintCodec implements FingerprintCodec<BinaryFingerprin
 		float[] vector = new float[FINGERPRINT_VECTOR_SIZE / 4];
 		BitSet bits = fingerprint.bits();
 		int bit = 0;
-		for (int i = 0; i < FINGERPRINT_VECTOR_SIZE/4; i++) {
+		for (int i = 0; i < FINGERPRINT_VECTOR_SIZE / 4; i++) {
 			float component = 0;
 			for (int r = 0; r < 4; r++) {
 				component += bits.get(bit) ? 1f : 0f;

@@ -46,6 +46,8 @@ public class BinaryFingerprintImpl implements BinaryFingerprint {
 			}
 		}
 		b.append("----\n");
+		b.append("Hex: " + hex() + "\n");
+		b.append("\n");
 		return b.toString();
 	}
 

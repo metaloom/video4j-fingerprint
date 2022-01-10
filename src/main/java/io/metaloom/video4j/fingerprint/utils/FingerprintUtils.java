@@ -1,5 +1,9 @@
 package io.metaloom.video4j.fingerprint.utils;
 
+import static io.metaloom.video4j.fingerprint.v2.QuadFingerprint.FINGERPRINT_VECTOR_SIZE;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -37,6 +41,124 @@ public final class FingerprintUtils {
 		return bitset;
 	}
 
+	public static short[] transformToShort4Bit(BitSet bits, int len) {
+		short[] result = new short[len];
+		int nBit = 0;
+		for (int i = 0; i < result.length; i++) {
+			byte number = 0;
+			number = (byte) (number >> 2);
+			// for (int r = 0; r < 4; r++) {
+			// number = bits.get(nBit++) ? 1:0;
+			// }
+
+			System.out.println("ER: " + toShort4Bit(bits, 9));
+			result[i] = (short) number;
+		}
+		return result;
+	}
+
+	/**
+	 * Convert the short array into a bitset with reduces precision (2bit)
+	 * 
+	 * @param numbers
+	 * @return
+	 */
+	public static BitSet transformToBitSet2Bit(short[] numbers) {
+		BitSet data = new BitSet();
+		int nBit = 0;
+		for (int i = 0; i < numbers.length; i++) {
+			short number = numbers[i];
+			switch (number) {
+			case 0:
+				data.set(nBit++, false);
+				data.set(nBit++, false);
+				break;
+			case 1:
+				data.set(nBit++, false);
+				data.set(nBit++, true);
+				break;
+			case 2:
+				data.set(nBit++, true);
+				data.set(nBit++, false);
+				break;
+			case 3:
+				data.set(nBit++, true);
+				data.set(nBit++, true);
+				break;
+			default:
+				throw new RuntimeException("Invalid number encountered. Can't map values >4 Got: " + number);
+			}
+		}
+		return data;
+	}
+
+	public static BitSet transformToBitSet4Bit(short[] numbers) {
+		BitSet bits = new BitSet(numbers.length * 4);
+		for (int i = 0; i < numbers.length; i++) {
+			byte number = (byte) numbers[i];
+			ByteBuffer buffer = ByteBuffer.wrap(new byte[] { number });
+			BitSet shortBits = BitSet.valueOf(buffer.array());
+			print(shortBits, 1);
+			for (int r = 0; r < 4; r++) {
+				bits.set(i, shortBits.get(r));
+			}
+		}
+		return bits;
+	}
+
+	/**
+	 * Print the given amount of bytes in binary form.
+	 * 
+	 * @param bits
+	 * @param nBytes
+	 */
+	private static void print(BitSet bits, int nBytes) {
+		StringBuffer b = new StringBuffer();
+		int nBit = 0;
+		for (int i = 0; i < nBytes * 8; i++) {
+			b.append(bits.get(i) ? "1" : "0");
+			if (++nBit % 8 == 0) {
+				b.append(" ");
+			}
+		}
+		b.append("\n");
+		System.out.println(b.toString());
+
+	}
+
+	public static short[] transformToShort2Bit(BitSet bitSet) {
+		short[] numbers = new short[bitSet.size()];
+		int offset = 0;
+		for (int i = 0; i < numbers.length; i++) {
+			numbers[i] = toShort2Bit(bitSet, offset);
+			offset += 2;
+		}
+		return numbers;
+	}
+
+	/**
+	 * Transform the bitset into a short array and use 4 bits to generate the values.
+	 * 
+	 * @param bitSet
+	 * @return
+	 */
+	public static short[] transformToShorts4Bit(BitSet bits) {
+		short[] vector = new short[FINGERPRINT_VECTOR_SIZE];
+		int bit = 0;
+		for (int i = 0; i < FINGERPRINT_VECTOR_SIZE; i++) {
+			byte component = 0;
+			for (int r = 0; r < 4; r++) {
+				component += bits.get(bit) ? 1f : 0f;
+				bit++;
+				System.out.println("" + bit);
+			}
+			System.out.println("Com: " + component);
+			vector[i] = component;
+
+		}
+		return vector;
+	}
+
 	/**
 	 * Compute the levenshtein distance between both strings.
 	 * 
@@ -63,6 +185,42 @@ public final class FingerprintUtils {
 		}
 
 		return dp[x.length()][y.length()];
+	}
+
+	/**
+	 * Extracts a short from the next two bits of the set.
+	 * 
+	 * @param bits
+	 * @param offset
+	 * @return
+	 */
+	public static short toShort2Bit(BitSet bits, int offset) {
+		int radix = 2;
+		int i = offset;
+		int len = 2;
+		int result = 0;
+		while (i < offset + len) {
+			int digit = bits.get(i) ? 1 : 0;
+			result *= radix;
+			result -= digit;
+			i++;
+		}
+		return (short) -result;
+	}
+
+	/**
+	 * Extract a short from the next four bits of the set.
+	 * 
+	 * @param bits
+	 * @param offset
+	 * @return
+	 */
+	public static byte toShort4Bit(BitSet bits, int offset) {
+		print(bits, 1);
+		byte b = (byte) (bits.toByteArray()[0] << 4);
+		BitSet b2 = BitSet.valueOf(new byte[] { b });
+		print(b2, 1);
+		return b;
 	}
 
 	private static int costOfSubstitution(char a, char b) {

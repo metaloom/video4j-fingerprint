@@ -40,6 +40,7 @@ public class QuadFingerprintTest extends AbstractFingerprintTest<QuadFingerprint
 	public void testWithFourPixelsForCompaction() throws IOException, InterruptedException {
 		Mat mat = fivePixelMat();
 		QuadFingerprint fp = create(mat);
+		assertEquals(EXPECTED_FINGERPRINT_HEX_SIZE, fp.hex().length());
 		log.debug(fp.toString());
 		System.out.println(fp.hex().length());
 		System.out.println(fp.hex());
@@ -47,7 +48,7 @@ public class QuadFingerprintTest extends AbstractFingerprintTest<QuadFingerprint
 
 		// The vector values should be compacted 
 		assertEquals(EXPECTED_VECTOR_SIZE, vector.length);
-		assertEquals(4f, vector[0], 0);
+		assertEquals(3f, vector[0], 0);
 		assertEquals(1f, vector[1], 0);
 		assertEquals(0f, vector[2], 0);
 		fullAssert(fp, mat);

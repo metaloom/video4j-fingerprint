@@ -4,9 +4,9 @@ public class QuadFingerprintImpl implements QuadFingerprint {
 
 	private static final QuadFingerprintCodec CODEC = QuadFingerprintCodec.instance();
 
-	private byte[] vectorData;
+	private short[] vectorData;
 
-	public QuadFingerprintImpl(byte[] vectorData) {
+	public QuadFingerprintImpl(short[] vectorData) {
 		this.vectorData = vectorData;
 	}
 
@@ -21,7 +21,7 @@ public class QuadFingerprintImpl implements QuadFingerprint {
 	}
 
 	@Override
-	public byte[] getVectorData() {
+	public short[] getVectorData() {
 		return vectorData;
 	}
 
@@ -41,6 +41,7 @@ public class QuadFingerprintImpl implements QuadFingerprint {
 			}
 		}
 		b.append("---\n");
+		b.append("Hex: " + hex() + "\n");
 		b.append("\n");
 		return b.toString();
 	}

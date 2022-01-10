@@ -2,9 +2,7 @@ package io.metaloom.video4j.fingerprint.v2;
 
 import org.opencv.core.Mat;
 
-import io.metaloom.utils.hash.HashUtils;
 import io.metaloom.video4j.fingerprint.Fingerprint;
-import io.metaloom.video4j.fingerprint.InvalidFormatException;
 
 /**
  * Alternative experimental fingerprint format which reduces vector size and fingerprint size.
@@ -42,10 +40,10 @@ public interface QuadFingerprint extends Fingerprint {
 	}
 
 	/**
-	 * Return the raw vector data. Note that {@link #array()} should be used to serialize the whole fingerprint as this would also contain metadata.
+	 * Return the raw vector data.
 	 * 
 	 * @return
 	 */
-	byte[] getVectorData();
+	short[] getVectorData();
 
 }

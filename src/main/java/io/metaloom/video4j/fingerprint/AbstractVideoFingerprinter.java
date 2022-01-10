@@ -49,12 +49,12 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 	}
 
 	@Override
-	public T hash(Video video) throws InterruptedException {
+	public T hash(Video video) {
 		return hash(video, null);
 	}
 
 	@Override
-	public T hash(Video video, PreviewHandler handler) throws InterruptedException {
+	public T hash(Video video, PreviewHandler handler) {
 		if (log.isDebugEnabled()) {
 			log.debug("Start hashing of " + video.path());
 		}

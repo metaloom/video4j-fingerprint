@@ -132,6 +132,8 @@ public abstract class AbstractFingerprintTest<T extends Fingerprint> extends Abs
 	}
 
 	protected Mat fivePixelMat() {
+		// 1111 1000...
+		// 15   8
 		Mat mat = emptyMat(16, 16);
 		mat.put(0, 0, 255f);
 		mat.put(0, 1, 255f);
