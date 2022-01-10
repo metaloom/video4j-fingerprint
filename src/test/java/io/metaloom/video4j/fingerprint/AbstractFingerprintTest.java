@@ -6,14 +6,12 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.BitSet;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.metaloom.video4j.Video4j;
 import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
 import io.metaloom.video4j.opencv.CVUtils;
 
@@ -30,11 +28,6 @@ public abstract class AbstractFingerprintTest<T extends Fingerprint> extends Abs
 	public AbstractFingerprintTest(int expectedHexLen, int expectedVectorSize) {
 		this.expectedHexLen = expectedHexLen;
 		this.expectedVectorSize = expectedVectorSize;
-	}
-
-	@BeforeClass
-	public static void setup() {
-		Video4j.init();
 	}
 
 	@Test
@@ -133,7 +126,7 @@ public abstract class AbstractFingerprintTest<T extends Fingerprint> extends Abs
 
 	protected Mat fivePixelMat() {
 		// 1111 1000...
-		// 15   8
+		// 15 8
 		Mat mat = emptyMat(16, 16);
 		mat.put(0, 0, 255f);
 		mat.put(0, 1, 255f);

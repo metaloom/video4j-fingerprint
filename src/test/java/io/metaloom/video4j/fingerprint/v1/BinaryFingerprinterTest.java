@@ -11,7 +11,6 @@ import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
-import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 import io.metaloom.video4j.impl.MatProvider;
 
 public class BinaryFingerprinterTest extends AbstractMediaTest {

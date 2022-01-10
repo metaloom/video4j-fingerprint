@@ -1,9 +1,5 @@
 package io.metaloom.video4j.fingerprint.utils;
 
-import static io.metaloom.video4j.fingerprint.v2.QuadFingerprint.FINGERPRINT_VECTOR_SIZE;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.BitSet;
 
@@ -92,20 +88,6 @@ public final class FingerprintUtils {
 		return data;
 	}
 
-	public static BitSet transformToBitSet4Bit(short[] numbers) {
-		BitSet bits = new BitSet(numbers.length * 4);
-		for (int i = 0; i < numbers.length; i++) {
-			byte number = (byte) numbers[i];
-			ByteBuffer buffer = ByteBuffer.wrap(new byte[] { number });
-			BitSet shortBits = BitSet.valueOf(buffer.array());
-			print(shortBits, 1);
-			for (int r = 0; r < 4; r++) {
-				bits.set(i, shortBits.get(r));
-			}
-		}
-		return bits;
-	}
-
 	/**
 	 * Print the given amount of bytes in binary form.
 	 * 
@@ -123,40 +105,6 @@ public final class FingerprintUtils {
 		}
 		b.append("\n");
 		System.out.println(b.toString());
-
-	}
-
-	public static short[] transformToShort2Bit(BitSet bitSet) {
-		short[] numbers = new short[bitSet.size()];
-		int offset = 0;
-		for (int i = 0; i < numbers.length; i++) {
-			numbers[i] = toShort2Bit(bitSet, offset);
-			offset += 2;
-		}
-		return numbers;
-	}
-
-	/**
-	 * Transform the bitset into a short array and use 4 bits to generate the values.
-	 * 
-	 * @param bitSet
-	 * @return
-	 */
-	public static short[] transformToShorts4Bit(BitSet bits) {
-		short[] vector = new short[FINGERPRINT_VECTOR_SIZE];
-		int bit = 0;
-		for (int i = 0; i < FINGERPRINT_VECTOR_SIZE; i++) {
-			byte component = 0;
-			for (int r = 0; r < 4; r++) {
-				component += bits.get(bit) ? 1f : 0f;
-				bit++;
-				System.out.println("" + bit);
-			}
-			System.out.println("Com: " + component);
-			vector[i] = component;
-
-		}
-		return vector;
 	}
 
 	/**
