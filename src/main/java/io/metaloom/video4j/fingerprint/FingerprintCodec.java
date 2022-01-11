@@ -44,6 +44,14 @@ public interface FingerprintCodec<T extends Fingerprint> {
 	float[] toVector(T fingerprint);
 
 	/**
+	 * Convert the fingerprint into its vector representation which is condensed by combining each 4th regular vector component.
+	 * 
+	 * @param fingerprint
+	 * @return
+	 */
+	float[] toQuadVector(T fingerprint);
+
+	/**
 	 * Decode the hex string into a fingerprint.
 	 * 
 	 * @param hex

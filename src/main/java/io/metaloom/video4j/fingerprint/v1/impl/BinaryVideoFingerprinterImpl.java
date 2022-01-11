@@ -8,7 +8,6 @@ import io.metaloom.video4j.Video;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.PreviewHandler;
 import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
-import io.metaloom.video4j.fingerprint.v1.BinaryFingerprintCodec;
 import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 import io.metaloom.video4j.opencv.CVUtils;
 
@@ -22,20 +21,13 @@ public class BinaryVideoFingerprinterImpl extends AbstractVideoFingerprinter<Bin
 
 	private double skipFactor = 0.35f;
 
-	public static final BinaryFingerprintCodec CODEC = BinaryFingerprintCodec.instance();
-
 	public BinaryVideoFingerprinterImpl() {
 		super(hashSize, len, stackFactor);
 	}
 
 	@Override
 	protected BinaryFingerprint createFingerprint(Mat mat) {
-		return CODEC.encode(mat);
-	}
-
-	@Override
-	public BinaryFingerprint hash(Video video) {
-		return hash(video, null);
+		return BinaryFingerprint.CODEC.encode(mat);
 	}
 
 	@Override

@@ -81,9 +81,11 @@ public class FingerprintDebugUI {
 		playButton.addActionListener(event -> {
 			for (Video video : videos) {
 				Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
-				if (fp != null) {
-					log.debug("Len: " + fp.array());
-					log.debug("Hex: " + fp.hex());
+				if (log.isDebugEnabled()) {
+					if (fp != null) {
+						log.debug("Len: " + fp.array().length);
+						log.debug("Hex: " + fp.hex());
+					}
 				}
 			}
 		});
@@ -96,6 +98,7 @@ public class FingerprintDebugUI {
 			double val = (double) slider.getValue();
 			double factor = val / 100f;
 			log.info("SkipFactor: " + factor);
+			// Only binary video fingerprinter has variable skip factor support
 			if (hasher instanceof BinaryVideoFingerprinter) {
 				((BinaryVideoFingerprinter) hasher).setSkipFactor(factor);
 			}

@@ -7,7 +7,6 @@ import io.metaloom.video4j.Video4j;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.ui.FingerprintDebugUI;
-import io.metaloom.video4j.fingerprint.v1.impl.BinaryVideoFingerprinterImpl;
 import io.metaloom.video4j.fingerprint.v2.impl.MultiSectorVideoFingerprinterImpl;
 
 /**

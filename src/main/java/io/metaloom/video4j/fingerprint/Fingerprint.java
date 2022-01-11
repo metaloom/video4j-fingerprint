@@ -16,7 +16,9 @@ public interface Fingerprint {
 	 * 
 	 * @return
 	 */
-	byte[] array();
+	default byte[] array() {
+		return codec().encode(this);
+	}
 
 	/**
 	 * Return the hex representation of the fingerprint.
@@ -28,16 +30,29 @@ public interface Fingerprint {
 	}
 
 	/**
+	 * Size of the vector which this fingerprint generates.
+	 * 
+	 * @return
+	 */
+	short vectorSize();
+
+	/**
 	 * Convert the fingerprint into a vector of floats.
 	 * 
 	 * @return
 	 */
-	float[] vector();
+	default float[] vector() {
+		return codec().toVector(this);
+	}
 
 	/**
 	 * Convert the fingerprint into vector of floats. The vector components will be condensed by combining more bit data into one component.
 	 * 
 	 * @return
 	 */
-	float[] quadVector();
+	default float[] quadVector() {
+		return codec().toQuadVector(this);
+	}
+
+	<R extends Fingerprint, T extends FingerprintCodec<R>> T codec();
 }

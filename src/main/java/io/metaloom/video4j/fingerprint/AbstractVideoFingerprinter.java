@@ -48,6 +48,11 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 		this.stackFactor = factor;
 	}
 
+	@Override
+	public T hash(Video video) {
+		return hash(video, null);
+	}
+
 	// public void setContrastAlpha(double contrastAlpha) {
 	// this.contrastAlpha = contrastAlpha;
 	// }

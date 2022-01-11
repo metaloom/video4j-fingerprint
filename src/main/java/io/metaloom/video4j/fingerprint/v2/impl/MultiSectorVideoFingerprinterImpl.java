@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.PreviewHandler;
-import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
+import io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint;
 import io.metaloom.video4j.fingerprint.v2.MultiSectorVideoFingerprinter;
+import io.metaloom.video4j.opencv.CVUtils;
 
-public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinter<BinaryFingerprint> implements MultiSectorVideoFingerprinter {
+public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinter<MultiSectorFingerprint> implements MultiSectorVideoFingerprinter {
 
 	private static Logger log = LoggerFactory.getLogger(MultiSectorVideoFingerprinterImpl.class.getName());
 
@@ -22,21 +23,24 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 		super(hashSize, len, stackFactor);
 	}
 
+
 	@Override
-	public BinaryFingerprint hash(Video video) {
-		// TODO Auto-generated method stub
-		return null;
+	public MultiSectorFingerprint hash(Video video, PreviewHandler handler) {
+		if (log.isDebugEnabled()) {
+			log.debug("Start hashing of " + video.path());
+		}
+		Mat stack = null;
+		try {
+			stack = computeImageStack(video, 0.35f, handler);
+			MultiSectorFingerprint fp = createFingerprint(stack);
+			return fp;
+		} finally {
+			CVUtils.free(stack);
+		}
 	}
 
 	@Override
-	public BinaryFingerprint hash(Video video, PreviewHandler handler) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected BinaryFingerprint createFingerprint(Mat mat) {
-		// TODO Auto-generated method stub
-		return null;
+	protected MultiSectorFingerprint createFingerprint(Mat mat) {
+		return MultiSectorFingerprint.CODEC.encode(mat);
 	}
 }
