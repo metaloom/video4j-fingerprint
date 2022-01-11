@@ -10,8 +10,6 @@ import static io.metaloom.video4j.opencv.CVUtils.toGreyScale;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.impl.MatProvider;
@@ -19,15 +17,13 @@ import io.metaloom.video4j.opencv.CVUtils;
 
 public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implements VideoFingerprinter<T> {
 
-	private static Logger log = LoggerFactory.getLogger(AbstractVideoFingerprinter.class.getName());
+	protected int resXY;
 
-	private int resXY;
+	protected double stackFactor;
 
-	private double stackFactor;
+	protected int len;
 
-	private int len;
-
-	private int speedUp = 8;
+	protected int speedUp = 8;
 
 	/**
 	 * Create a new hasher.
@@ -151,7 +147,6 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 			}
 			return finalStep;
 		} finally {
-
 			CVUtils.free(stack);
 			CVUtils.free(frame);
 		}

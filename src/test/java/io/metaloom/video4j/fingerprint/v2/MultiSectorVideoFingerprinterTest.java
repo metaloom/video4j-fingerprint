@@ -36,9 +36,9 @@ public class MultiSectorVideoFingerprinterTest extends AbstractMediaTest {
 		System.out.println(hash2);
 		System.out.println(hash3);
 		// Assert that only a few bits differ
-		assertEquals(4, FingerprintUtils.levenshteinDistance(hash1, hash2));
-		assertEquals(6, FingerprintUtils.levenshteinDistance(hash1, hash3));
-		assertEquals(2, FingerprintUtils.levenshteinDistance(hash2, hash3));
+		assertEquals(1, FingerprintUtils.levenshteinDistance(hash1, hash2));
+		assertEquals(0, FingerprintUtils.levenshteinDistance(hash1, hash3));
+		assertEquals(1, FingerprintUtils.levenshteinDistance(hash2, hash3));
 
 		// Verify that no leaks occur
 		MatProvider.printLeaks();

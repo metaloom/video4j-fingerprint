@@ -1,8 +1,14 @@
 package io.metaloom.video4j.fingerprint.v2.impl;
 
+import static io.metaloom.video4j.opencv.CVUtils.empty;
+import static io.metaloom.video4j.opencv.CVUtils.isBlackFrame;
 import static io.metaloom.video4j.opencv.CVUtils.normalize;
+import static io.metaloom.video4j.opencv.CVUtils.resize;
+import static io.metaloom.video4j.opencv.CVUtils.toGreyScale;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +17,7 @@ import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.PreviewHandler;
 import io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint;
 import io.metaloom.video4j.fingerprint.v2.MultiSectorVideoFingerprinter;
+import io.metaloom.video4j.impl.MatProvider;
 import io.metaloom.video4j.opencv.CVUtils;
 
 public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinter<MultiSectorFingerprint> implements MultiSectorVideoFingerprinter {
@@ -23,9 +30,9 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 	public static int hashSize = 16;
 
 	/**
-	 * Defines how many content should be used to generate the fingerprint (per sector).
+	 * Defines how many content should be used to generate the fingerprint (total frames)
 	 */
-	public static int len = 30 * 3;
+	public static int len = 15 * 4;
 
 	/**
 	 * Defines a factor which will impact how much effect will different frames in the stacking process will have.
@@ -52,51 +59,121 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 	public MultiSectorFingerprint hash(Video video, PreviewHandler handler) {
 		if (log.isDebugEnabled()) {
 			log.debug("Start hashing of " + video.path());
-			log.debug("Using skip factor: " + String.format("%.2f", skipFactor));
+		}
+		Mat stack = null;
+		try {
+			stack = hash1(video, handler);
+			return createFingerprint(stack);
+		} finally {
+			CVUtils.free(stack);
+		}
+	}
+
+	public Mat hash1(Video video, PreviewHandler handler) {
+		if (!video.isOpen()) {
+			throw new RuntimeException("Video has not yet been opened.");
 		}
 
-		Mat multiSectorStack = null;
-		Mat binaryResult = null;
+		int frameNo = 0;
+		double frameFactor = (1.0d / (double) len * stackFactor);
+
+		Mat finalStep = null;
+		Mat frame = MatProvider.mat();
+		Mat stack = null;
 		try {
-			for (int i = 1; i <= sectorCount; i++) {
-				Mat stack = null;
-				try {
-					// Determine the effective skip factor for this sector
-					double factor = i * skipFactor;
-					if (factor >= 1) {
-						if (log.isWarnEnabled()) {
-							log.warn("The effective skkip factor exceeded 1. Aborting stacking after " + i + " runs.");
-						}
+			int sectorLen = len / sectorCount;
+			for (int i = 1; i < sectorCount; i++) {
+				if (log.isTraceEnabled()) {
+					log.trace("Starting stacking of sector " + i + " need to grather " + sectorLen + " frames.");
+				}
+
+				// Determine the effective skip factor for this sector
+				double factor = i * skipFactor;
+				if (factor >= 1) {
+					if (log.isWarnEnabled()) {
+						log.warn("The effective skkip factor exceeded 1. Aborting stacking after " + i + " runs.");
+					}
+					break;
+				}
+				video.seekToFrameRatio(factor);
+
+				// Now process some frames
+				int useableFrameNo = 0;
+				while (true) {
+					if (!video.frame(frame)) {
 						break;
 					}
-					stack = computeImageStack(video, factor, handler);
+
+					frameNo++;
+					if (frameNo % speedUp == 0) {
+						continue;
+					}
+					useableFrameNo++;
+					if (useableFrameNo >= sectorLen) {
+						break;
+					}
 					if (stack == null) {
-						if (log.isWarnEnabled()) {
-							log.warn("Stack for factor " + factor + " yield null. Aborting stacking after " + i + " runs.");
-						}
-						break;
+						stack = empty(frame);
 					}
-					if (multiSectorStack == null) {
-						multiSectorStack = CVUtils.empty(stack);
+					Mat step1 = empty(frame);
+
+					// 1. Resize
+					resize(frame, step1, 512, 512);
+
+					// 2. To greyscale
+					toGreyScale(step1, step1);
+					normalize(step1, step1, 0, 205);
+
+					// 3. Skip black frames
+					if (isBlackFrame(step1)) {
+						continue;
 					}
-					combineStack(multiSectorStack, stack, stackFactor);
+
+					// 3. Increase contrast
+					// increaseContrast(step1, step1, contrastAlpha, 0);
+
+					// 4. Resize
+					Imgproc.blur(step1, step1, new Size(15.1f, 15.1f));
+					resize(step1, step1, resXY, resXY);
+
+					// 5. Normalize
+					Mat step2 = empty(frame);
+					normalize(step1, step2, 0, 255);
+					CVUtils.free(step1);
+
+					// 6. Stack the image
+					Mat oldStack = stack;
+					stack = stackImage(stack, step2, frameFactor);
+
+					Mat step3 = stack.clone();
+					// Core.normalize(reduce, reduce, 125.0, 255.0, Core.NORM_MINMAX);
+
+					resize(step3, step3, resXY, resXY);
+					// increaseContract(step3, step3, 1, 23);
+					// Imgproc.threshold(reduce2, reduce2, 0, 255f, Imgproc.THRESH_BINARY);
+
+					Mat step4 = empty(step3);
+					normalize(step3, step4, 0, 255);
+
+					finalStep = toBinary(step4, handler);
+
 					if (handler != null) {
-						handler.update(null, null, null, null, null, null, multiSectorStack, null);
+						handler.update(frame, step1, step2, step3, step4, finalStep, null, null);
 					}
-				} finally {
-					CVUtils.free(stack);
+					CVUtils.free(oldStack);
+					CVUtils.free(step2);
+					CVUtils.free(step3);
+					CVUtils.free(step4);
+
 				}
 			}
-
-			normalize(multiSectorStack, multiSectorStack, 0, 255);
-			binaryResult = toBinary(multiSectorStack, handler);
-			if (handler != null) {
-				handler.update(null, null, null, null, null, null, multiSectorStack, binaryResult);
+			if (finalStep == null) {
+				return null;
 			}
-			return createFingerprint(multiSectorStack);
+			return finalStep;
 		} finally {
-			CVUtils.free(multiSectorStack);
-			CVUtils.free(binaryResult);
+			CVUtils.free(stack);
+			CVUtils.free(frame);
 		}
 	}
 
@@ -129,7 +206,9 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 				}
 				double mixedValue = stackValue;
 				mixedValue = (stackValue + (frameValue * factor));
-				// System.out.println(mixedValue + " = " + stackValue + " + " + (frameValue * factor) + " (" + factor + ")");
+				if (log.isTraceEnabled()) {
+					log.trace(mixedValue + " = " + stackValue + " + " + (frameValue * factor) + " (" + factor + ")");
+				}
 				result.put(x, y, mixedValue);
 			}
 		}
