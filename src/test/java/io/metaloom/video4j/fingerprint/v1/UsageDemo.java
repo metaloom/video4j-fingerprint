@@ -3,6 +3,7 @@ package io.metaloom.video4j.fingerprint.v1;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Video4j;
 import io.metaloom.video4j.Videos;
+import io.metaloom.video4j.fingerprint.v1.impl.BinaryVideoFingerprinterImpl;
 
 public class UsageDemo {
 
@@ -14,7 +15,7 @@ public class UsageDemo {
 		Video4j.init();
 
 		// Create a fingerprinter for the video
-		BinaryVideoFingerprinter gen = new BinaryVideoFingerprinter();
+		BinaryVideoFingerprinterImpl gen = new BinaryVideoFingerprinterImpl();
 
 		// Open the video using the Video4j API
 		try (Video video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {

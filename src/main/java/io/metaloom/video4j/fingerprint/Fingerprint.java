@@ -34,4 +34,10 @@ public interface Fingerprint {
 	 */
 	float[] vector();
 
+	/**
+	 * Convert the fingerprint into vector of floats. The vector components will be condensed by combining more bit data into one component.
+	 * 
+	 * @return
+	 */
+	float[] quadVector();
 }

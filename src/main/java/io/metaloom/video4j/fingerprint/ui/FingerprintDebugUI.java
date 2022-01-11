@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import io.metaloom.video4j.Video;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.Fingerprint;
+import io.metaloom.video4j.fingerprint.VideoFingerprinter;
 import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 
 /**
@@ -39,9 +40,9 @@ public class FingerprintDebugUI {
 	private JPanel listPanel = new JPanel();
 
 	private final int blowupSize;
-	private final BinaryVideoFingerprinter hasher;
+	private final VideoFingerprinter<?> hasher;
 
-	public FingerprintDebugUI(int blowupSize, BinaryVideoFingerprinter hasher) {
+	public FingerprintDebugUI(int blowupSize, VideoFingerprinter<?> hasher) {
 		this.blowupSize = blowupSize;
 		this.hasher = hasher;
 	}
@@ -95,7 +96,9 @@ public class FingerprintDebugUI {
 			double val = (double) slider.getValue();
 			double factor = val / 100f;
 			log.info("SkipFactor: " + factor);
-			hasher.setSkipFactor(factor);
+			if (hasher instanceof BinaryVideoFingerprinter) {
+				((BinaryVideoFingerprinter) hasher).setSkipFactor(factor);
+			}
 		});
 		slider.setName("Skip");
 		slider.setMajorTickSpacing(2550);

@@ -39,4 +39,5 @@ public interface BinaryFingerprint extends Fingerprint {
 	static BinaryFingerprint of(String hex) {
 		return CODEC.decode(hex);
 	}
+
 }

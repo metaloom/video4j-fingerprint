@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import io.metaloom.video4j.fingerprint.FingerprintCodec;
 import io.metaloom.video4j.fingerprint.InvalidFormatException;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
+import io.metaloom.video4j.fingerprint.v1.impl.BinaryFingerprintImpl;
 
 /**
  * Data format:

@@ -1,4 +1,4 @@
-package io.metaloom.video4j.fingerprint.v1;
+package io.metaloom.video4j.fingerprint.v2;
 
 import java.io.IOException;
 
@@ -8,18 +8,19 @@ import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.ui.FingerprintDebugUI;
 import io.metaloom.video4j.fingerprint.v1.impl.BinaryVideoFingerprinterImpl;
+import io.metaloom.video4j.fingerprint.v2.impl.MultiSectorVideoFingerprinterImpl;
 
 /**
  * Starts a small UI which shows the hasher process in action
  */
-public class BinaryFingerprintUIRunner extends AbstractMediaTest {
+public class MultiSectorFingerprintUIRunner extends AbstractMediaTest {
 
 	public static int blowupSize = 128;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Video4j.init();
 		String moviePath = BBB_SMALL;
-		BinaryVideoFingerprinterImpl hasher = new BinaryVideoFingerprinterImpl();
+		MultiSectorVideoFingerprinter hasher = new MultiSectorVideoFingerprinterImpl();
 		FingerprintDebugUI debugUi = new FingerprintDebugUI(blowupSize, hasher);
 
 		Video video = Videos.open(moviePath);

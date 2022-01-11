@@ -11,6 +11,7 @@ import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
+import io.metaloom.video4j.fingerprint.v1.impl.BinaryVideoFingerprinterImpl;
 import io.metaloom.video4j.impl.MatProvider;
 
 public class BinaryFingerprinterTest extends AbstractMediaTest {
@@ -19,7 +20,7 @@ public class BinaryFingerprinterTest extends AbstractMediaTest {
 
 	@Test
 	public void runHasher() throws InterruptedException, IOException {
-		BinaryVideoFingerprinter hasher = new BinaryVideoFingerprinter();
+		BinaryVideoFingerprinterImpl hasher = new BinaryVideoFingerprinterImpl();
 		String hash1, hash2, hash3;
 		try (Video video1 = Videos.open(BBB_SMALL)) {
 			hash1 = hasher.hash(video1).hex();
@@ -31,6 +32,9 @@ public class BinaryFingerprinterTest extends AbstractMediaTest {
 			hash3 = hasher.hash(video3).hex();
 		}
 
+		System.out.println(hash1);
+		System.out.println(hash2);
+		System.out.println(hash3);
 		// Assert that only a few bits differ
 		assertEquals(3, FingerprintUtils.levenshteinDistance(hash1, hash2));
 		assertEquals(3, FingerprintUtils.levenshteinDistance(hash1, hash3));

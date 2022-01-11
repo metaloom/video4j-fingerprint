@@ -1,24 +1,14 @@
 package io.metaloom.video4j.fingerprint.v1;
 
-import org.opencv.core.Mat;
+import io.metaloom.video4j.fingerprint.VideoFingerprinter;
 
-import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
+public interface BinaryVideoFingerprinter extends VideoFingerprinter<BinaryFingerprint> {
 
-public class BinaryVideoFingerprinter extends AbstractVideoFingerprinter<BinaryFingerprint> {
+	/**
+	 * Set the skip factor which will influence what section of the video should be chosen for fingerprinting.
+	 * 
+	 * @param skipFactor
+	 */
+	void setSkipFactor(double skipFactor);
 
-	public static int hashSize = 16;
-	public static int len = 30 * 3;
-	public static double skipFactor = 0.35f;
-	public static double stackFactor = 1.30955d;
-
-	public static final BinaryFingerprintCodec CODEC = BinaryFingerprintCodec.instance();
-
-	public BinaryVideoFingerprinter() {
-		super(hashSize, len, skipFactor, stackFactor);
-	}
-
-	@Override
-	protected BinaryFingerprint createFingerprint(Mat mat) {
-		return CODEC.encode(mat);
-	}
 }

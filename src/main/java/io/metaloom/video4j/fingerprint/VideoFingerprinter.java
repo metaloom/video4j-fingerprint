@@ -14,7 +14,7 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	T hash(Video video) throws InterruptedException;
+	T hash(Video video);
 
 	/**
 	 * Hash the given video and use the preview handler to hook into the hashing processes.
@@ -24,14 +24,7 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	T hash(Video video, PreviewHandler handler) throws InterruptedException;
-
-	/**
-	 * Set the skip factor which will influence what section of the video should be chosen for fingerprinting.
-	 * 
-	 * @param skipFactor
-	 */
-	void setSkipFactor(double skipFactor);
+	T hash(Video video, PreviewHandler handler);
 
 	/**
 	 * Set the stacking factor which will influence the stacking of frames.

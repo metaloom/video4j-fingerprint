@@ -27,8 +27,6 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 
 	private int len;
 
-	private double skipFactor;
-
 	private int speedUp = 8;
 
 	/**
@@ -37,27 +35,32 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 	 * @param resXY
 	 * @param len
 	 *            Amount of frames to use for the hash
-	 * @param skipFactor
-	 *            Percent of video duration which should be skipped
 	 * @param stackFactor
 	 */
-	public AbstractVideoFingerprinter(int resXY, int len, double skipFactor, double stackFactor) {
+	public AbstractVideoFingerprinter(int resXY, int len, double stackFactor) {
 		this.resXY = resXY;
 		this.len = len;
-		this.skipFactor = skipFactor;
 		this.stackFactor = stackFactor;
 	}
 
 	@Override
-	public T hash(Video video) {
-		return hash(video, null);
+	public void setStackFactor(double factor) {
+		this.stackFactor = factor;
 	}
 
-	@Override
-	public T hash(Video video, PreviewHandler handler) {
-		if (log.isDebugEnabled()) {
-			log.debug("Start hashing of " + video.path());
-		}
+	// public void setContrastAlpha(double contrastAlpha) {
+	// this.contrastAlpha = contrastAlpha;
+	// }
+
+	/**
+	 * 
+	 * @param video
+	 * @param skipFactor
+	 *            Percent of video duration which should be skipped
+	 * @param handler
+	 * @return
+	 */
+	protected Mat computeImageStack(Video video, double skipFactor, PreviewHandler handler) {
 		if (!video.isOpen()) {
 			throw new RuntimeException("Video has not yet been opened.");
 		}
@@ -141,14 +144,12 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 			if (finalStep == null) {
 				return null;
 			}
-			T fp = createFingerprint(finalStep);
-			return fp;
+			return finalStep;
 		} finally {
-			CVUtils.free(finalStep);
+
 			CVUtils.free(stack);
 			CVUtils.free(frame);
 		}
-
 	}
 
 	/**
@@ -159,7 +160,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 	 */
 	protected abstract T createFingerprint(Mat mat);
 
-	private Mat toBinary(Mat src, PreviewHandler handler) {
+	protected Mat toBinary(Mat src, PreviewHandler handler) {
 		Mat result = src.clone();
 		double meanV = mean(src);
 		Imgproc.threshold(src, result, meanV, 255f, Imgproc.THRESH_BINARY);
@@ -180,7 +181,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 		}
 	}
 
-	private static Mat stackImage(Mat stack, Mat frame, double factor) {
+	protected static Mat stackImage(Mat stack, Mat frame, double factor) {
 		if (stack == null) {
 			return empty(frame);
 		}
@@ -200,20 +201,6 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 			}
 		}
 		return result;
-	}
-
-	// public void setContrastAlpha(double contrastAlpha) {
-	// this.contrastAlpha = contrastAlpha;
-	// }
-
-	@Override
-	public void setStackFactor(double factor) {
-		this.stackFactor = factor;
-	}
-
-	@Override
-	public void setSkipFactor(double skipFactor) {
-		this.skipFactor = skipFactor;
 	}
 
 }
