@@ -15,7 +15,7 @@ public class UsageDemo {
 		Video4j.init();
 
 		// Create a fingerprinter for the video
-		BinaryVideoFingerprinterImpl gen = new BinaryVideoFingerprinterImpl();
+		BinaryVideoFingerprinter gen = new BinaryVideoFingerprinterImpl();
 
 		// Open the video using the Video4j API
 		try (Video video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {
@@ -23,8 +23,17 @@ public class UsageDemo {
 			// Run the actual hashing process
 			BinaryFingerprint fingerprint = gen.hash(video);
 			String hex = fingerprint.hex();
-			System.out.println(hex);
 			// hex = 0001000100ff060006000f002e001d0084000600e40076d172c07c84ffcefffffefff8fffdff
+
+			// Or get the binary form of the fingeprint
+			byte[] bin = fingerprint.array();
+
+			// Access the vector data
+			float[] vec = fingerprint.vector();
+
+			// Print information about the fingerprint data
+			System.out.println(fingerprint.toString());
+
 		}
 
 	}

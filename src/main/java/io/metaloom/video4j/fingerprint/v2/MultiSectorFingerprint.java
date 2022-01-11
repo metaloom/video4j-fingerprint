@@ -9,7 +9,7 @@ import io.metaloom.video4j.fingerprint.BitBackedFingerprint;
  */
 public interface MultiSectorFingerprint extends BitBackedFingerprint {
 
-	public static final short FINGERPRINT_VERSION = 1;
+	public static final short FINGERPRINT_VERSION = 2;
 
 	public static final short FINGERPRINT_VECTOR_SIZE = 16 * 16;
 

@@ -112,6 +112,23 @@ public abstract class AbstractFingerprintTest<T extends Fingerprint> extends Abs
 		}
 	}
 
+	@Test
+	public void testWithFourPixelsForCompaction() throws IOException, InterruptedException {
+		Mat mat = fivePixelMat();
+		T fp = create(mat);
+		log.debug(fp.toString());
+		System.out.println(fp.hex().length());
+		System.out.println(fp.hex());
+		float[] vector = fp.quadVector();
+
+		// The vector values should be compacted
+		assertEquals(expectedVectorSize / 4, vector.length);
+		assertEquals(4f, vector[0], 0);
+		assertEquals(1f, vector[1], 0);
+		assertEquals(0f, vector[2], 0);
+		fullAssert(fp, mat);
+	}
+
 	protected Mat lastPixelMat() {
 		Mat mat = emptyMat(16, 16);
 		mat.put(15, 15, 255f);

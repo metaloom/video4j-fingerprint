@@ -1,7 +1,7 @@
 package io.metaloom.video4j.fingerprint.v2;
 
-import static io.metaloom.video4j.fingerprint.v1.BinaryFingerprint.FINGERPRINT_VECTOR_SIZE;
-import static io.metaloom.video4j.fingerprint.v1.BinaryFingerprint.FINGERPRINT_VERSION;
+import static io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint.FINGERPRINT_VECTOR_SIZE;
+import static io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint.FINGERPRINT_VERSION;
 
 import java.util.BitSet;
 

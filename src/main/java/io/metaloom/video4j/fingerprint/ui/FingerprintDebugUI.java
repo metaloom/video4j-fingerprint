@@ -80,7 +80,8 @@ public class FingerprintDebugUI {
 		JButton playButton = new JButton("Play", playButtonIcon);
 		playButton.addActionListener(event -> {
 			for (Video video : videos) {
-				Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f) -> refresh(video, a, b, c, d, e, f));
+				FPPreviewPanel preview = vidsPanels.get(video);
+				Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f, g, h) -> refresh(preview, a, b, c, d, e, f, g, h));
 				if (log.isDebugEnabled()) {
 					if (fp != null) {
 						log.debug("Len: " + fp.array().length);
@@ -98,10 +99,7 @@ public class FingerprintDebugUI {
 			double val = (double) slider.getValue();
 			double factor = val / 100f;
 			log.info("SkipFactor: " + factor);
-			// Only binary video fingerprinter has variable skip factor support
-			if (hasher instanceof BinaryVideoFingerprinter) {
-				((BinaryVideoFingerprinter) hasher).setSkipFactor(factor);
-			}
+			hasher.setSkipFactor(factor);
 		});
 		slider.setName("Skip");
 		slider.setMajorTickSpacing(2550);
@@ -158,9 +156,8 @@ public class FingerprintDebugUI {
 		return new ImageIcon(imgURL);
 	}
 
-	public void refresh(Video video, Mat a, Mat b, Mat c, Mat d, Mat e, Mat f) {
-		FPPreviewPanel preview = vidsPanels.get(video);
-		preview.setImages(a, b, c, d, e, f);
+	public void refresh(FPPreviewPanel preview, Mat a, Mat b, Mat c, Mat d, Mat e, Mat f, Mat g, Mat h) {
+		preview.setImages(a, b, c, d, e, f, g, h);
 		preview.repaint();
 	}
 

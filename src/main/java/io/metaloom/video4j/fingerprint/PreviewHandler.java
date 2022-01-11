@@ -16,8 +16,10 @@ public interface PreviewHandler {
 	 * @param step2
 	 * @param step3
 	 * @param step4
+	 * @param step5
+	 * @param step6
 	 * @param result
 	 */
-	void update(Mat source, Mat step1, Mat step2, Mat step3, Mat step4, Mat result);
+	void update(Mat source, Mat step1, Mat step2, Mat step3, Mat step4, Mat step5, Mat step6, Mat result);
 
 }

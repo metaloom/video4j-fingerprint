@@ -33,4 +33,11 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 */
 	void setStackFactor(double factor);
 
+	/**
+	 * Set the skip factor. The effect depends on the actual fingerprinter implementation. It usually affects the area that is being utilized for fingerprint generation.
+	 * 
+	 * @param factor
+	 */
+	void setSkipFactor(double factor);
+
 }

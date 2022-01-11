@@ -139,7 +139,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 				finalStep = toBinary(step4, handler);
 
 				if (handler != null) {
-					handler.update(frame, step1, step2, step3, step4, finalStep);
+					handler.update(frame, step1, step2, step3, step4, finalStep, null, null);
 				}
 				CVUtils.free(oldStack);
 				CVUtils.free(step2);
@@ -186,6 +186,17 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 		}
 	}
 
+	/**
+	 * Stack the provided frame onto the stack.
+	 * 
+	 * @param stack
+	 *            Final stack to which the frame will be added
+	 * @param frame
+	 *            Frame to be added to the stack
+	 * @param factor
+	 *            Factor to be used to influence stacking process
+	 * @return New stack
+	 */
 	protected static Mat stackImage(Mat stack, Mat frame, double factor) {
 		if (stack == null) {
 			return empty(frame);
@@ -200,8 +211,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 				double frameValue = frame.get(x, y)[0];
 				double mixedValue = stackValue;
 				mixedValue = (stackValue + (frameValue * factor));
-				// System.out.println(mixedValue + " = " + stackValue + " + " + (frameValue *
-				// factor) + " (" + factor + ")");
+				//System.out.println(mixedValue + " = " + stackValue + " + " + (frameValue * factor) + " (" + factor + ")");
 				result.put(x, y, mixedValue);
 			}
 		}

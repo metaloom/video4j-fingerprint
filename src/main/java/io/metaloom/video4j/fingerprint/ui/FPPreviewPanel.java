@@ -1,6 +1,6 @@
 package io.metaloom.video4j.fingerprint.ui;
 
-import static io.metaloom.video4j.opencv.CVUtils.blowUp;
+import static io.metaloom.video4j.opencv.CVUtils.scale;
 import static io.metaloom.video4j.opencv.CVUtils.mat2BufferedImage;
 
 import javax.swing.JPanel;
@@ -21,49 +21,69 @@ public class FPPreviewPanel extends JPanel {
 	private ImagePanel step2Panel;
 	private ImagePanel step3Panel;
 	private ImagePanel step4Panel;
+	private ImagePanel step5Panel;
+	private ImagePanel step6Panel;
 	private ImagePanel resultPanel;
 
-	private int blowupSize;
+	private int upscaleSize;
 
-	public FPPreviewPanel(int blowupSize) {
-		this.blowupSize = blowupSize;
-		sourcePanel = new ImagePanel(blowupSize, blowupSize);
-		step1Panel = new ImagePanel(blowupSize, blowupSize);
-		step2Panel = new ImagePanel(blowupSize, blowupSize);
-		step3Panel = new ImagePanel(blowupSize, blowupSize);
-		step4Panel = new ImagePanel(blowupSize, blowupSize);
-		resultPanel = new ImagePanel(blowupSize, blowupSize);
+	/**
+	 * Create a new preview panel
+	 * 
+	 * @param upscaleSize
+	 *            New dimensions(w,h) for the individual images of the panel
+	 */
+	public FPPreviewPanel(int upscaleSize) {
+		this.upscaleSize = upscaleSize;
+		sourcePanel = new ImagePanel(upscaleSize, upscaleSize);
+		step1Panel = new ImagePanel(upscaleSize, upscaleSize);
+		step2Panel = new ImagePanel(upscaleSize, upscaleSize);
+		step3Panel = new ImagePanel(upscaleSize, upscaleSize);
+		step4Panel = new ImagePanel(upscaleSize, upscaleSize);
+		step5Panel = new ImagePanel(upscaleSize, upscaleSize);
+		step6Panel = new ImagePanel(upscaleSize, upscaleSize);
+		resultPanel = new ImagePanel(upscaleSize, upscaleSize);
 		add(sourcePanel);
 		add(step1Panel);
 		add(step2Panel);
 		add(step3Panel);
 		add(step4Panel);
+		add(step5Panel);
+		add(step6Panel);
 		add(resultPanel);
 	}
 
-	public void setImages(Mat source, Mat step1, Mat step2, Mat step3, Mat step4, Mat result) {
+	public void setImages(Mat source, Mat step1, Mat step2, Mat step3, Mat step4, Mat step5, Mat step6, Mat result) {
 		if (source != null && !source.empty()) {
-			sourcePanel.setImage(blowUp(mat2BufferedImage(source), blowupSize, blowupSize));
+			sourcePanel.setImage(scale(mat2BufferedImage(source), upscaleSize, upscaleSize));
 		}
 
 		if (step1 != null && !step1.empty()) {
-			step1Panel.setImage(blowUp(mat2BufferedImage(step1), blowupSize, blowupSize));
+			step1Panel.setImage(scale(mat2BufferedImage(step1), upscaleSize, upscaleSize));
 		}
 
 		if (step2 != null && !step2.empty()) {
-			step2Panel.setImage(blowUp(mat2BufferedImage(step2), blowupSize, blowupSize));
+			step2Panel.setImage(scale(mat2BufferedImage(step2), upscaleSize, upscaleSize));
 		}
 
 		if (step3 != null && !step3.empty()) {
-			step3Panel.setImage(blowUp(mat2BufferedImage(step3), blowupSize, blowupSize));
+			step3Panel.setImage(scale(mat2BufferedImage(step3), upscaleSize, upscaleSize));
 		}
 
 		if (step4 != null && !step4.empty()) {
-			step4Panel.setImage(blowUp(mat2BufferedImage(step4), blowupSize, blowupSize));
+			step4Panel.setImage(scale(mat2BufferedImage(step4), upscaleSize, upscaleSize));
+		}
+
+		if (step5 != null && !step5.empty()) {
+			step5Panel.setImage(scale(mat2BufferedImage(step5), upscaleSize, upscaleSize));
+		}
+
+		if (step6 != null && !step6.empty()) {
+			step6Panel.setImage(scale(mat2BufferedImage(step6), upscaleSize, upscaleSize));
 		}
 
 		if (result != null && !result.empty()) {
-			resultPanel.setImage(blowUp(mat2BufferedImage(result), blowupSize, blowupSize));
+			resultPanel.setImage(scale(mat2BufferedImage(result), upscaleSize, upscaleSize));
 		}
 	}
 }

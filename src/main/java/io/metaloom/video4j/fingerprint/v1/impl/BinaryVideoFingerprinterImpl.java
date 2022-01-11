@@ -38,8 +38,7 @@ public class BinaryVideoFingerprinterImpl extends AbstractVideoFingerprinter<Bin
 		Mat stack = null;
 		try {
 			stack = computeImageStack(video, skipFactor, handler);
-			BinaryFingerprint fp = createFingerprint(stack);
-			return fp;
+			return createFingerprint(stack);
 		} finally {
 			CVUtils.free(stack);
 		}
