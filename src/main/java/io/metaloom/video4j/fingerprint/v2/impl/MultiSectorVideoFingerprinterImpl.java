@@ -186,7 +186,6 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 	 *            Frame to be added to the stack
 	 * @param factor
 	 *            Factor to be used to influence stacking process
-	 * @return New stack
 	 */
 	protected static void combineStack(Mat result, Mat stack, double factor) {
 

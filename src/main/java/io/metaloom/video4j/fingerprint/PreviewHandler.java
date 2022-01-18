@@ -9,7 +9,7 @@ import org.opencv.core.Mat;
 public interface PreviewHandler {
 
 	/**
-	 * The {@link #update(Mat, Mat, Mat, Mat, Mat, Mat)} method will be invoked for every processed fingerprint frame.
+	 * The method will be invoked for every processed fingerprint frame.
 	 * 
 	 * @param source
 	 * @param step1

@@ -12,7 +12,6 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * 
 	 * @param video
 	 * @return
-	 * @throws InterruptedException
 	 */
 	T hash(Video video);
 
@@ -22,7 +21,6 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * @param video
 	 * @param handler
 	 * @return
-	 * @throws InterruptedException
 	 */
 	T hash(Video video, PreviewHandler handler);
 
