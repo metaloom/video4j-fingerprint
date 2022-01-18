@@ -1,11 +1,14 @@
 package io.metaloom.video4j.fingerprint.utils;
 
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.BitSet;
 
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.metaloom.video4j.fingerprint.BitBackedFingerprint;
 
 public final class FingerprintUtils {
 
@@ -101,6 +104,29 @@ public final class FingerprintUtils {
 			}
 		}
 		log.trace(sb.toString());
+	}
+
+	/**
+	 * Convert the bitset into a visual representation.
+	 * 
+	 * @param fingerprint
+	 * @return
+	 */
+	public static BufferedImage toImage(BitBackedFingerprint fingerprint) {
+		int size = fingerprint.vectorSize();
+		int w = (int) Math.sqrt(size);
+		int h = (int) Math.sqrt(size);
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+		int bit = 0;
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+				int value = fingerprint.bits().get(bit) ? 0: -255;
+				image.setRGB(x, y, value);
+				bit++;
+			}
+		}
+
+		return image;
 	}
 
 }
