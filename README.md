@@ -15,7 +15,7 @@ Downside of the used stacking approach is however that there is no robustness ag
 <dependency>
   <groupId>io.metaloom.video</groupId>
   <artifactId>video4j-fingerprint</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
