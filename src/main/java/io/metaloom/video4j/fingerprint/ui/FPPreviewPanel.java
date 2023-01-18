@@ -1,7 +1,7 @@
 package io.metaloom.video4j.fingerprint.ui;
 
 import static io.metaloom.video4j.opencv.CVUtils.scale;
-import static io.metaloom.video4j.opencv.CVUtils.mat2BufferedImage;
+import static io.metaloom.video4j.opencv.CVUtils.matToBufferedImage;
 
 import javax.swing.JPanel;
 
@@ -55,35 +55,35 @@ public class FPPreviewPanel extends JPanel {
 
 	public void setImages(Mat source, Mat step1, Mat step2, Mat step3, Mat step4, Mat step5, Mat step6, Mat result) {
 		if (source != null && !source.empty()) {
-			sourcePanel.setImage(scale(mat2BufferedImage(source), upscaleSize, upscaleSize));
+			sourcePanel.setImage(scale(matToBufferedImage(source), upscaleSize, upscaleSize));
 		}
 
 		if (step1 != null && !step1.empty()) {
-			step1Panel.setImage(scale(mat2BufferedImage(step1), upscaleSize, upscaleSize));
+			step1Panel.setImage(scale(matToBufferedImage(step1), upscaleSize, upscaleSize));
 		}
 
 		if (step2 != null && !step2.empty()) {
-			step2Panel.setImage(scale(mat2BufferedImage(step2), upscaleSize, upscaleSize));
+			step2Panel.setImage(scale(matToBufferedImage(step2), upscaleSize, upscaleSize));
 		}
 
 		if (step3 != null && !step3.empty()) {
-			step3Panel.setImage(scale(mat2BufferedImage(step3), upscaleSize, upscaleSize));
+			step3Panel.setImage(scale(matToBufferedImage(step3), upscaleSize, upscaleSize));
 		}
 
 		if (step4 != null && !step4.empty()) {
-			step4Panel.setImage(scale(mat2BufferedImage(step4), upscaleSize, upscaleSize));
+			step4Panel.setImage(scale(matToBufferedImage(step4), upscaleSize, upscaleSize));
 		}
 
 		if (step5 != null && !step5.empty()) {
-			step5Panel.setImage(scale(mat2BufferedImage(step5), upscaleSize, upscaleSize));
+			step5Panel.setImage(scale(matToBufferedImage(step5), upscaleSize, upscaleSize));
 		}
 
 		if (step6 != null && !step6.empty()) {
-			step6Panel.setImage(scale(mat2BufferedImage(step6), upscaleSize, upscaleSize));
+			step6Panel.setImage(scale(matToBufferedImage(step6), upscaleSize, upscaleSize));
 		}
 
 		if (result != null && !result.empty()) {
-			resultPanel.setImage(scale(mat2BufferedImage(result), upscaleSize, upscaleSize));
+			resultPanel.setImage(scale(matToBufferedImage(result), upscaleSize, upscaleSize));
 		}
 	}
 }
