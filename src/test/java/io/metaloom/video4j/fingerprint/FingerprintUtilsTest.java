@@ -1,11 +1,11 @@
 package io.metaloom.video4j.fingerprint;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;

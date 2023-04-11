@@ -11,7 +11,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.impl.MatProvider;
 import io.metaloom.video4j.opencv.CVUtils;
 
@@ -45,7 +45,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 	}
 
 	@Override
-	public T hash(Video video) {
+	public T hash(VideoFile video) {
 		return hash(video, null);
 	}
 
@@ -61,7 +61,7 @@ public abstract class AbstractVideoFingerprinter<T extends Fingerprint> implemen
 	 * @param handler
 	 * @return
 	 */
-	protected Mat computeImageStack(Video video, double skipFactor, PreviewHandler handler) {
+	protected Mat computeImageStack(VideoFile video, double skipFactor, PreviewHandler handler) {
 		if (!video.isOpen()) {
 			throw new RuntimeException("Video has not yet been opened.");
 		}

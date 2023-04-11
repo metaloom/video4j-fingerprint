@@ -12,7 +12,7 @@ import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.PreviewHandler;
 import io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint;
@@ -56,9 +56,9 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 	}
 
 	@Override
-	public MultiSectorFingerprint hash(Video video, PreviewHandler handler) {
+	public MultiSectorFingerprint hash(VideoFile video, PreviewHandler handler) {
 		if (log.isDebugEnabled()) {
-			log.debug("Start hashing of " + video.path());
+			log.debug("Start hashing of " + video);
 		}
 		Mat stack = null;
 		try {
@@ -69,7 +69,7 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 		}
 	}
 
-	public Mat hash1(Video video, PreviewHandler handler) {
+	public Mat hash1(VideoFile video, PreviewHandler handler) {
 		if (!video.isOpen()) {
 			throw new RuntimeException("Video has not yet been opened.");
 		}

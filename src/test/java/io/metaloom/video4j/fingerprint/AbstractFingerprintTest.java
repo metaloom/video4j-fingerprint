@@ -1,11 +1,12 @@
 package io.metaloom.video4j.fingerprint;
 
 import static io.metaloom.video4j.fingerprint.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,38 +66,50 @@ public abstract class AbstractFingerprintTest<T extends Fingerprint> extends Abs
 		T fp = create(mat);
 		log.debug(fp.toString());
 		float[] floats = fp.vector();
-		assertEquals("The fingerprint did not contain the expected amount of vectors.", expectedVectorSize, floats.length);
+		assertEquals(expectedVectorSize, floats.length, "The fingerprint did not contain the expected amount of vectors.");
 	}
 
-	@Test(expected = InvalidFormatException.class)
+	@Test
 	public void testConversionErrorHandling() throws IOException {
-		create(HASH_TRUNCATED);
+		assertThrows(InvalidFormatException.class, () -> {
+			create(HASH_TRUNCATED);
+		});
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testNull() throws IOException {
-		create((String) null);
+		assertThrows(InvalidFormatException.class, () -> {
+			create((String) null);
+		});
 	}
 
-	@Test(expected = InvalidFormatException.class)
+	@Test
 	public void testEmptyHex() throws IOException {
-		create("");
+		assertThrows(InvalidFormatException.class, () -> {
+			create("");
+		});
 	}
 
-	@Test(expected = InvalidFormatException.class)
+	@Test
 	public void testNonHex() throws IOException {
-		create("Röäeoüpü");
+		assertThrows(InvalidFormatException.class, () -> {
+			create("Röäeoüpü");
+		});
 	}
 
-	@Test(expected = InvalidFormatException.class)
+	@Test
 	public void testPartialHex() throws IOException {
-		create("F");
+		assertThrows(InvalidFormatException.class, () -> {
+			create("F");
+		});
 	}
 
-	@Test(expected = InvalidFormatException.class)
+	@Test
 	public void testOldFingerprint() {
-		String hex = "fefff4fdf4f9bcf980f800f840fa407e003e581efe1ffe1fff330e000000000001";
-		create(hex);
+		assertThrows(InvalidFormatException.class, () -> {
+			String hex = "fefff4fdf4f9bcf980f800f840fa407e003e581efe1ffe1fff330e000000000001";
+			create(hex);
+		});
 	}
 
 	@Test

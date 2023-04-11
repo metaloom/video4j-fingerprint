@@ -20,11 +20,10 @@ import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.Fingerprint;
 import io.metaloom.video4j.fingerprint.VideoFingerprinter;
-import io.metaloom.video4j.fingerprint.v1.BinaryVideoFingerprinter;
 
 /**
  * A small UI which contains sliders to control the individual parameters of the video fingerprinter.
@@ -33,8 +32,8 @@ public class FingerprintDebugUI {
 
 	private static final Logger log = LoggerFactory.getLogger(FingerprintDebugUI.class);
 
-	private List<Video> videos = new ArrayList<>();
-	private Map<Video, FPPreviewPanel> vidsPanels = new HashMap<>();
+	private List<VideoFile> videos = new ArrayList<>();
+	private Map<VideoFile, FPPreviewPanel> vidsPanels = new HashMap<>();
 
 	private JFrame frame = new JFrame("Video Title");
 	private JPanel listPanel = new JPanel();
@@ -56,7 +55,7 @@ public class FingerprintDebugUI {
 
 		listPanel.setName("Video");
 		frame.setLayout(new FlowLayout());
-		for (Video video : videos) {
+		for (VideoFile video : videos) {
 			FPPreviewPanel preview = new FPPreviewPanel(blowupSize);
 			vidsPanels.put(video, preview);
 			frame.add(preview);
@@ -71,7 +70,7 @@ public class FingerprintDebugUI {
 
 	}
 
-	public void add(Video video) {
+	public void add(VideoFile video) {
 		videos.add(video);
 	}
 
@@ -79,7 +78,7 @@ public class FingerprintDebugUI {
 		ImageIcon playButtonIcon = createImageIcon("/images/play.gif");
 		JButton playButton = new JButton("Play", playButtonIcon);
 		playButton.addActionListener(event -> {
-			for (Video video : videos) {
+			for (VideoFile video : videos) {
 				FPPreviewPanel preview = vidsPanels.get(video);
 				Fingerprint fp = hasher.hash(video, (a, b, c, d, e, f, g, h) -> refresh(preview, a, b, c, d, e, f, g, h));
 				if (log.isDebugEnabled()) {

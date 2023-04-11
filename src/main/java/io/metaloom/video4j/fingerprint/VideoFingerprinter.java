@@ -1,6 +1,6 @@
 package io.metaloom.video4j.fingerprint;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 
 /**
  * Fingerprinter which can be used to generate media fingerprints.
@@ -13,7 +13,7 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * @param video
 	 * @return
 	 */
-	T hash(Video video);
+	T hash(VideoFile video);
 
 	/**
 	 * Hash the given video and use the preview handler to hook into the hashing processes.
@@ -22,7 +22,7 @@ public interface VideoFingerprinter<T extends Fingerprint> {
 	 * @param handler
 	 * @return
 	 */
-	T hash(Video video, PreviewHandler handler);
+	T hash(VideoFile video, PreviewHandler handler);
 
 	/**
 	 * Set the stacking factor which will influence the stacking of frames.

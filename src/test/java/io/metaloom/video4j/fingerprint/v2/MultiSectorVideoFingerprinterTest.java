@@ -1,13 +1,13 @@
 package io.metaloom.video4j.fingerprint.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.AbstractMediaTest;
 import io.metaloom.video4j.fingerprint.utils.FingerprintUtils;
@@ -22,13 +22,13 @@ public class MultiSectorVideoFingerprinterTest extends AbstractMediaTest {
 	public void runHasher() throws InterruptedException, IOException {
 		MultiSectorVideoFingerprinter hasher = new MultiSectorVideoFingerprinterImpl();
 		String hash1, hash2, hash3;
-		try (Video video1 = Videos.open(BBB_SMALL)) {
+		try (VideoFile video1 = Videos.open(BBB_SMALL)) {
 			hash1 = hasher.hash(video1).hex();
 		}
-		try (Video video2 = Videos.open(BBB_MEDIUM)) {
+		try (VideoFile video2 = Videos.open(BBB_MEDIUM)) {
 			hash2 = hasher.hash(video2).hex();
 		}
-		try (Video video3 = Videos.open(BBB_LARGE)) {
+		try (VideoFile video3 = Videos.open(BBB_LARGE)) {
 			hash3 = hasher.hash(video3).hex();
 		}
 
@@ -42,7 +42,7 @@ public class MultiSectorVideoFingerprinterTest extends AbstractMediaTest {
 
 		// Verify that no leaks occur
 		MatProvider.printLeaks();
-		assertFalse("There should not be any leaked mats", MatProvider.hasLeaks());
+		assertFalse(MatProvider.hasLeaks(), "There should not be any leaked mats");
 
 	}
 

@@ -1,7 +1,7 @@
 package io.metaloom.video4j.fingerprint.v1;
 
-import io.metaloom.video4j.Video;
 import io.metaloom.video4j.Video4j;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.Videos;
 import io.metaloom.video4j.fingerprint.v1.impl.BinaryVideoFingerprinterImpl;
 import io.metaloom.video4j.fingerprint.v2.MultiSectorFingerprint;
@@ -22,7 +22,7 @@ public class UsageDemo {
 		MultiSectorVideoFingerprinter gen = new MultiSectorVideoFingerprinterImpl();
 
 		// Open the video using the Video4j API
-		try (Video video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {
+		try (VideoFile video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {
 
 			// Run the actual hashing process
 			MultiSectorFingerprint fingerprint = gen.hash(video);
@@ -49,7 +49,7 @@ public class UsageDemo {
 		BinaryVideoFingerprinter gen = new BinaryVideoFingerprinterImpl();
 
 		// Open the video using the Video4j API
-		try (Video video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {
+		try (VideoFile video = Videos.open("src/test/resources/Big_Buck_Bunny_720_10s_30MB.mp4")) {
 
 			// Run the actual hashing process
 			BinaryFingerprint fingerprint = gen.hash(video);

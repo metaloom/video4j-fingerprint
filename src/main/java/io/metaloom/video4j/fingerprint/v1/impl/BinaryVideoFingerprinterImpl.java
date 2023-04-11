@@ -4,7 +4,7 @@ import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.metaloom.video4j.Video;
+import io.metaloom.video4j.VideoFile;
 import io.metaloom.video4j.fingerprint.AbstractVideoFingerprinter;
 import io.metaloom.video4j.fingerprint.PreviewHandler;
 import io.metaloom.video4j.fingerprint.v1.BinaryFingerprint;
@@ -31,9 +31,9 @@ public class BinaryVideoFingerprinterImpl extends AbstractVideoFingerprinter<Bin
 	}
 
 	@Override
-	public BinaryFingerprint hash(Video video, PreviewHandler handler) {
+	public BinaryFingerprint hash(VideoFile video, PreviewHandler handler) {
 		if (log.isDebugEnabled()) {
-			log.debug("Start hashing of " + video.path());
+			log.debug("Start hashing of " + video);
 		}
 		Mat stack = null;
 		try {

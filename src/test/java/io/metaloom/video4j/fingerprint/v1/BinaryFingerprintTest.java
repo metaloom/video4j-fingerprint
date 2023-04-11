@@ -1,8 +1,9 @@
 package io.metaloom.video4j.fingerprint.v1;
 
 import static io.metaloom.video4j.fingerprint.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opencv.core.Mat;
 
 import io.metaloom.video4j.fingerprint.AbstractFingerprintTest;
@@ -32,10 +33,12 @@ public class BinaryFingerprintTest extends AbstractFingerprintTest<BinaryFingerp
 	protected void fullAssert(BinaryFingerprint fp, Mat mat) {
 		assertThat(fp).matches(mat).matches(fp.hex()).matches(fp.array());
 	}
-	
-	@Test(expected = InvalidFormatException.class)
+
+	@Test
 	public void testIncompatibiltyWithV2() {
-		BinaryFingerprint.of("0002000100ff0100000000000000000000000000000000000000000000000000000000000000");
+		assertThrows(InvalidFormatException.class, () -> {
+			BinaryFingerprint.of("0002000100ff0100000000000000000000000000000000000000000000000000000000000000");
+		});
 	}
 
 }

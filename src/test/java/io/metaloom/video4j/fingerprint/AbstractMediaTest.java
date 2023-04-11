@@ -2,7 +2,7 @@ package io.metaloom.video4j.fingerprint;
 
 import java.util.BitSet;
 
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public abstract class AbstractMediaTest {
 	public static final String BBB_MEDIUM = "src/test/resources/BigBuckBunny-320x240.mp4";
 	public static final String BBB_LARGE = "src/test/resources/BigBuckBunny-480x360.mp4";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setup() {
 		Video4j.init();
 	}
