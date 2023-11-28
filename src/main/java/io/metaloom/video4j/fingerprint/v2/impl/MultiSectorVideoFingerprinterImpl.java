@@ -4,7 +4,7 @@ import static io.metaloom.video4j.opencv.CVUtils.empty;
 import static io.metaloom.video4j.opencv.CVUtils.isBlackFrame;
 import static io.metaloom.video4j.opencv.CVUtils.normalize;
 import static io.metaloom.video4j.opencv.CVUtils.resize;
-import static io.metaloom.video4j.opencv.CVUtils.toGreyScale;
+import static io.metaloom.video4j.opencv.CVUtils.toGrayScale;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -121,7 +121,7 @@ public class MultiSectorVideoFingerprinterImpl extends AbstractVideoFingerprinte
 					resize(frame, step1, 512, 512);
 
 					// 2. To greyscale
-					toGreyScale(step1, step1);
+					toGrayScale(step1, step1);
 					normalize(step1, step1, 0, 205);
 
 					// 3. Skip black frames
